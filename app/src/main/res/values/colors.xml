@@ -1,5 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
+    <!-- ===== MARCA (tema claro) ===== -->
+    <color name="stockflow_primary">#007691</color>
+    <color name="stockflow_on_primary">#FFFFFF</color>
+    <color name="stockflow_primary_container">#C9EAF3</color>
+
+    <color name="stockflow_secondary">#008C8C</color>
+    <color name="stockflow_on_secondary">#FFFFFF</color>
+    <color name="stockflow_secondary_container">#C8EEEE</color>
+
+    <color name="stockflow_accent">#1A907A</color>
+    <color name="stockflow_on_accent">#FFFFFF</color>
+    <color name="stockflow_accent_container">#C8EDE4</color>
+
+    <!-- ===== TEXTO ===== -->
+    <color name="stockflow_text_primary">#062C3A</color>
+    <color name="stockflow_text_secondary">#66747A</color>
+
+    <!-- ===== FONDOS Y SUPERFICIES ===== -->
+    <color name="stockflow_background">#FFFFFF</color>
+    <color name="stockflow_surface">#F5F7F7</color>
+    <color name="stockflow_surface_low">#F9FBFB</color>
+    <color name="stockflow_surface_high">#EEF2F2</color>
+    <color name="stockflow_surface_highest">#E8EDEE</color>
+    <color name="stockflow_surface_variant">#E3EBEC</color>
+    <color name="stockflow_outline">#7A878C</color>
+    <color name="stockflow_outline_variant">#D5DEDF</color>
+
+    <!-- ===== ESTADOS (también se usan directo para indicadores de stock) ===== -->
+    <color name="stockflow_warning">#F59E0B</color>
+    <color name="stockflow_success">#16A34A</color>
+    <color name="stockflow_error">#DC2626</color>
+    <color name="stockflow_on_error">#FFFFFF</color>
+    <color name="stockflow_error_container">#FEE2E2</color>
+    <color name="stockflow_on_error_container">#7F1D1D</color>
+
+    <!-- ===== TEMA OSCURO ===== -->
+    <color name="stockflow_dark_primary">#6FCBE3</color>
+    <color name="stockflow_dark_on_primary">#00333F</color>
+    <color name="stockflow_dark_primary_container">#004D5F</color>
+    <color name="stockflow_dark_on_primary_container">#BEEBF6</color>
+
+    <color name="stockflow_dark_secondary">#4FD1D1</color>
+    <color name="stockflow_dark_on_secondary">#003737</color>
+    <color name="stockflow_dark_secondary_container">#004F4F</color>
+    <color name="stockflow_dark_on_secondary_container">#B8F0F0</color>
+
+    <color name="stockflow_dark_accent">#5FD3B8</color>
+    <color name="stockflow_dark_on_accent">#00382D</color>
+    <color name="stockflow_dark_accent_container">#00513F</color>
+    <color name="stockflow_dark_on_accent_container">#B4F0DF</color>
+
+    <color name="stockflow_dark_background">#0F1A1E</color>
+    <color name="stockflow_dark_on_background">#E1E9EB</color>
+    <color name="stockflow_dark_surface_lowest">#0A1316</color>
+    <color name="stockflow_dark_surface_low">#121D21</color>
+    <color name="stockflow_dark_surface">#162226</color>
+    <color name="stockflow_dark_surface_high">#1C292E</color>
+    <color name="stockflow_dark_surface_highest">#233036</color>
+    <color name="stockflow_dark_surface_variant">#3A4A50</color>
+    <color name="stockflow_dark_on_surface_variant">#BAC6CA</color>
+    <color name="stockflow_dark_outline">#849398</color>
+    <color name="stockflow_dark_outline_variant">#3A4A50</color>
+
+    <color name="stockflow_dark_error">#F87171</color>
+    <color name="stockflow_dark_on_error">#450A0A</color>
+    <color name="stockflow_dark_error_container">#7F1D1D</color>
+    <color name="stockflow_dark_on_error_container">#FEE2E2</color>
+
 </resources>

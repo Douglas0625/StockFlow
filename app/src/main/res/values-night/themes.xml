@@ -1,7 +1,49 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Tema oscuro -->
     <style name="Base.Theme.StockFlow" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+        <item name="colorPrimary">@color/stockflow_dark_primary</item>
+        <item name="colorOnPrimary">@color/stockflow_dark_on_primary</item>
+        <item name="colorPrimaryContainer">@color/stockflow_dark_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/stockflow_dark_on_primary_container</item>
+
+        <item name="colorSecondary">@color/stockflow_dark_secondary</item>
+        <item name="colorOnSecondary">@color/stockflow_dark_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/stockflow_dark_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/stockflow_dark_on_secondary_container</item>
+
+        <item name="colorTertiary">@color/stockflow_dark_accent</item>
+        <item name="colorOnTertiary">@color/stockflow_dark_on_accent</item>
+        <item name="colorTertiaryContainer">@color/stockflow_dark_accent_container</item>
+        <item name="colorOnTertiaryContainer">@color/stockflow_dark_on_accent_container</item>
+
+        <item name="android:colorBackground">@color/stockflow_dark_background</item>
+        <item name="colorOnBackground">@color/stockflow_dark_on_background</item>
+        <item name="colorSurface">@color/stockflow_dark_background</item>
+        <item name="colorOnSurface">@color/stockflow_dark_on_background</item>
+        <item name="colorSurfaceVariant">@color/stockflow_dark_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/stockflow_dark_on_surface_variant</item>
+        <item name="colorSurfaceContainerLowest">@color/stockflow_dark_surface_lowest</item>
+        <item name="colorSurfaceContainerLow">@color/stockflow_dark_surface_low</item>
+        <item name="colorSurfaceContainer">@color/stockflow_dark_surface</item>
+        <item name="colorSurfaceContainerHigh">@color/stockflow_dark_surface_high</item>
+        <item name="colorSurfaceContainerHighest">@color/stockflow_dark_surface_highest</item>
+        <item name="colorOutline">@color/stockflow_dark_outline</item>
+        <item name="colorOutlineVariant">@color/stockflow_dark_outline_variant</item>
+
+        <item name="colorSurfaceInverse">@color/stockflow_dark_on_background</item>
+        <item name="colorOnSurfaceInverse">@color/stockflow_dark_background</item>
+        <item name="colorPrimaryInverse">@color/stockflow_primary</item>
+
+        <item name="colorError">@color/stockflow_dark_error</item>
+        <item name="colorOnError">@color/stockflow_dark_on_error</item>
+        <item name="colorErrorContainer">@color/stockflow_dark_error_container</item>
+        <item name="colorOnErrorContainer">@color/stockflow_dark_on_error_container</item>
+
+        <item name="android:fontFamily">sans</item>
+
     </style>
+
 </resources>

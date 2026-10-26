@@ -1,3 +1,30 @@
 <resources>
     <string name="app_name">StockFlow</string>
+
+    <!-- Navegación -->
+    <string name="nav_home">Inicio</string>
+    <string name="nav_products">Productos</string>
+    <string name="nav_movements">Movimientos</string>
+    <string name="nav_settings">Ajustes</string>
+
+    <!-- Acciones comunes -->
+    <string name="action_save">Guardar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_delete">Eliminar</string>
+    <string name="action_confirm">Confirmar</string>
+    <string name="action_search">Buscar</string>
+    <string name="action_add">Agregar</string>
+
+    <!-- Movimientos -->
+    <string name="movement_in">Entrada</string>
+    <string name="movement_out">Salida</string>
+
+    <!-- Stock -->
+    <string name="stock_current">Stock actual</string>
+    <string name="stock_minimum">Stock mínimo</string>
+    <string name="stock_low">Stock bajo</string>
+
+    <!-- Estados vacíos -->
+    <string name="empty_list">No hay elementos para mostrar</string>
 </resources>

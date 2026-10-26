@@ -1,9 +1,55 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
     <style name="Base.Theme.StockFlow" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <!-- Primario / secundario / acento -->
+        <item name="colorPrimary">@color/stockflow_primary</item>
+        <item name="colorOnPrimary">@color/stockflow_on_primary</item>
+        <item name="colorPrimaryContainer">@color/stockflow_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/stockflow_text_primary</item>
+
+        <item name="colorSecondary">@color/stockflow_secondary</item>
+        <item name="colorOnSecondary">@color/stockflow_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/stockflow_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/stockflow_text_primary</item>
+
+        <item name="colorTertiary">@color/stockflow_accent</item>
+        <item name="colorOnTertiary">@color/stockflow_on_accent</item>
+        <item name="colorTertiaryContainer">@color/stockflow_accent_container</item>
+        <item name="colorOnTertiaryContainer">@color/stockflow_text_primary</item>
+
+        <!-- Fondo y superficies -->
+        <item name="android:colorBackground">@color/stockflow_background</item>
+        <item name="colorOnBackground">@color/stockflow_text_primary</item>
+        <item name="colorSurface">@color/stockflow_background</item>
+        <item name="colorOnSurface">@color/stockflow_text_primary</item>
+        <item name="colorSurfaceVariant">@color/stockflow_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/stockflow_text_secondary</item>
+        <item name="colorSurfaceContainerLowest">@color/stockflow_background</item>
+        <item name="colorSurfaceContainerLow">@color/stockflow_surface_low</item>
+        <item name="colorSurfaceContainer">@color/stockflow_surface</item>
+        <item name="colorSurfaceContainerHigh">@color/stockflow_surface_high</item>
+        <item name="colorSurfaceContainerHighest">@color/stockflow_surface_highest</item>
+        <item name="colorOutline">@color/stockflow_outline</item>
+        <item name="colorOutlineVariant">@color/stockflow_outline_variant</item>
+
+        <!-- Snackbars y similares -->
+        <item name="colorSurfaceInverse">@color/stockflow_text_primary</item>
+        <item name="colorOnSurfaceInverse">@color/stockflow_surface</item>
+        <item name="colorPrimaryInverse">@color/stockflow_primary_container</item>
+
+        <!-- Error -->
+        <item name="colorError">@color/stockflow_error</item>
+        <item name="colorOnError">@color/stockflow_on_error</item>
+        <item name="colorErrorContainer">@color/stockflow_error_container</item>
+        <item name="colorOnErrorContainer">@color/stockflow_on_error_container</item>
+
+        <!-- Fuente por defecto -->
+        <item name="android:fontFamily">sans</item>
+
     </style>
 
     <style name="Theme.StockFlow" parent="Base.Theme.StockFlow" />
+
 </resources>
