@@ -9,6 +9,10 @@ android {
         version = release(37)
     }
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.leon.stockflow"
         minSdk = 24
