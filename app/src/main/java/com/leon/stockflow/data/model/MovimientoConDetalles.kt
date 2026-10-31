@@ -2,8 +2,8 @@ package com.leon.stockflow.data.model
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.leon.stockflow.data.local.entity.DetalleMovimiento
-import com.leon.stockflow.data.local.entity.Movimiento
+import com.leon.stockflow.data.entity.DetalleMovimiento
+import com.leon.stockflow.data.entity.Movimiento
 
 /**
  * Un movimiento con todas sus líneas (y el producto de cada línea).

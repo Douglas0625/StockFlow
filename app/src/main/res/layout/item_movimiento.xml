@@ -25,7 +25,7 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_products"
-                app:tint="@color/stockflow_text_secondary"
+                app:tint="?attr/colorOnSurfaceVariant"
                 tools:ignore="ContentDescription" />
         </FrameLayout>
 
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/stockflow_text_primary"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 tools:text="Cajas de Cartón A4" />
@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:textColor="@color/stockflow_text_secondary"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="12sp"
                 tools:text="Hoy, 10:30 AM" />
         </LinearLayout>

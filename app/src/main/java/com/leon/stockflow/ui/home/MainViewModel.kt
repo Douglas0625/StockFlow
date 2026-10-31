@@ -5,10 +5,10 @@ import android.text.format.DateUtils
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.leon.stockflow.R
-import com.leon.stockflow.data.local.AppDatabase
-import com.leon.stockflow.data.local.entity.DetalleMovimiento
-import com.leon.stockflow.data.local.entity.Movimiento
-import com.leon.stockflow.data.local.entity.Producto
+import com.leon.stockflow.data.AppDatabase
+import com.leon.stockflow.data.entity.DetalleMovimiento
+import com.leon.stockflow.data.entity.Movimiento
+import com.leon.stockflow.data.entity.Producto
 import com.leon.stockflow.data.model.MovimientoConDetalles
 import com.leon.stockflow.data.model.TipoMovimiento
 import kotlinx.coroutines.flow.SharingStarted

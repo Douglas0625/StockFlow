@@ -19,7 +19,9 @@ data class MovimientoUi(
     val tipo: TipoMovimiento
 )
 
-class MovimientoAdapter :
+class MovimientoAdapter(
+    private val alTocar: (idMovimiento: Long) -> Unit
+) :
     ListAdapter<MovimientoUi, MovimientoAdapter.ViewHolder>(Diff) {
 
     class ViewHolder(val binding: ItemMovimientoBinding) : RecyclerView.ViewHolder(binding.root)
@@ -39,6 +41,7 @@ class MovimientoAdapter :
             if (esEntrada) R.color.stockflow_success else R.color.stockflow_error
         )
 
+        b.root.setOnClickListener { alTocar(item.id) }
         b.tvTitulo.text = item.titulo
         b.tvFecha.text = item.fecha
         b.tvCantidad.text = item.cantidad

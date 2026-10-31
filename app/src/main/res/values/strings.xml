@@ -39,4 +39,15 @@
 
     <!-- Estados vacíos -->
     <string name="empty_list">No hay elementos para mostrar</string>
+
+    <!-- Títulos de pantallas secundarias -->
+    <string name="title_product_form">Agregar/Editar Producto</string>
+    <string name="title_product_detail">Detalle del Producto</string>
+    <string name="title_register_movement">Registrar Movimiento</string>
+    <string name="title_movement_detail">Detalles de Movimiento</string>
+
+    <!-- Pantallas en construcción (temporal) -->
+    <string name="under_construction">En construcción</string>
+    <string name="received_id">ID recibido: %1$d</string>
+    <string name="new_item">Nuevo (sin ID)</string>
 </resources>

@@ -1,26 +1,31 @@
 package com.leon.stockflow
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.leon.stockflow.databinding.ActivityMainBinding
+import com.leon.stockflow.ui.common.aplicarInsetsSistema
+import com.leon.stockflow.ui.common.configurarBarraInferior
+import com.leon.stockflow.ui.common.irAPestana
 import com.leon.stockflow.ui.home.MainViewModel
 import com.leon.stockflow.ui.home.MovimientoAdapter
+import com.leon.stockflow.ui.movements.MovimientoDetalleActivity
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
-    private val adapter = MovimientoAdapter()
+
+    // Al tocar un movimiento se abre su detalle
+    private val adapter = MovimientoAdapter { idMovimiento ->
+        startActivity(MovimientoDetalleActivity.crearIntent(this, idMovimiento))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,39 +33,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        binding.main.aplicarInsetsSistema()
 
         // viewModel.cargarDatosDePrueba() // TEMPORAL: descomentar, correr UNA vez y volver a comentar
 
         binding.rvMovimientos.adapter = adapter
-        configurarBarraInferior()
-        configurarClicks()
+        configurarBarraInferior(binding.bottomNav, R.id.nav_inicio)
+        binding.tvVerTodos.setOnClickListener { irAPestana(R.id.nav_movimientos) }
         observarDatos()
-    }
-
-    private fun configurarClicks() {
-        binding.tvVerTodos.setOnClickListener {
-            // TODO: abrir la pantalla de Movimientos
-            mostrarProximamente()
-        }
-    }
-
-    private fun configurarBarraInferior() {
-        binding.bottomNav.selectedItemId = R.id.nav_inicio
-        binding.bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_inicio -> true
-                else -> {
-                    // TODO: reemplazar por startActivity(...) cuando existan las otras pantallas
-                    mostrarProximamente()
-                    false // se queda marcado "Inicio"
-                }
-            }
-        }
     }
 
     private fun observarDatos() {
@@ -83,9 +63,5 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun mostrarProximamente() {
-        Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show()
     }
 }

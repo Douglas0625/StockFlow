@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/stockflow_background"
+    android:background="?attr/colorSurface"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -16,7 +16,7 @@
         android:paddingHorizontal="16dp"
         android:paddingVertical="14dp"
         android:text="@string/nav_home"
-        android:textColor="@color/stockflow_text_primary"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/stockflow_surface">
+        android:background="?attr/colorSurfaceContainer">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                         android:letterSpacing="0.05"
                         android:text="@string/home_total_units"
                         android:textAllCaps="true"
-                        android:textColor="@color/stockflow_text_secondary"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
@@ -60,7 +60,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="0"
-                        android:textColor="@color/stockflow_text_primary"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="32sp"
                         android:textStyle="bold"
                         tools:ignore="HardcodedText" />
@@ -93,7 +93,7 @@
                             android:letterSpacing="0.05"
                             android:text="@string/nav_products"
                             android:textAllCaps="true"
-                            android:textColor="@color/stockflow_text_secondary"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="12sp"
                             android:textStyle="bold" />
 
@@ -103,7 +103,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:text="0"
-                            android:textColor="@color/stockflow_text_primary"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="24sp"
                             android:textStyle="bold"
                             tools:ignore="HardcodedText" />
@@ -136,7 +136,7 @@
                                 android:letterSpacing="0.05"
                                 android:text="@string/stock_low"
                                 android:textAllCaps="true"
-                                android:textColor="@color/stockflow_text_secondary"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
 
@@ -154,7 +154,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:text="0"
-                            android:textColor="@color/stockflow_text_primary"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="24sp"
                             android:textStyle="bold"
                             tools:ignore="HardcodedText" />
@@ -176,7 +176,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/home_recent_movements"
-                    android:textColor="@color/stockflow_text_primary"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -188,7 +188,7 @@
                     android:padding="4dp"
                     android:text="@string/home_view_all"
                     android:textAllCaps="true"
-                    android:textColor="@color/stockflow_primary"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="13sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -209,20 +209,16 @@
                 android:gravity="center"
                 android:padding="24dp"
                 android:text="@string/empty_list"
-                android:textColor="@color/stockflow_text_secondary"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:visibility="gone" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
+        style="@style/BarraInferior"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/stockflow_background"
-        app:itemActiveIndicatorStyle="@style/NavActiveIndicator"
-        app:itemIconTint="@color/nav_icon_color"
-        app:itemTextColor="@color/nav_text_color"
-        app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu" />
 
 </LinearLayout>
