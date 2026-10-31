@@ -75,4 +75,8 @@ interface ProductoDao {
     /** Valor total del inventario a precio de compra. */
     @Query("SELECT COALESCE(SUM(cantidad_stock * precio_compra), 0) FROM producto")
     fun valorInventario(): Flow<Double>
+
+    /** Suma de todas las unidades en stock (para "Total de unidades"). */
+    @Query("SELECT COALESCE(SUM(cantidad_stock), 0) FROM producto")
+    fun totalUnidades(): Flow<Int>
 }

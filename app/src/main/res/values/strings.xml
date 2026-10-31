@@ -1,6 +1,18 @@
 <resources>
     <string name="app_name">StockFlow</string>
 
+    <!-- Inicio -->
+    <string name="home_total_units">Total de unidades</string>
+    <string name="home_recent_movements">Movimientos recientes</string>
+    <string name="home_view_all">Ver todos</string>
+    <string name="coming_soon">Próximamente</string>
+
+    <!-- Fechas y textos de movimientos -->
+    <string name="date_today">Hoy, %1$s</string>
+    <string name="date_yesterday">Ayer, %1$s</string>
+    <string name="no_products">Sin productos</string>
+    <string name="and_more">%1$s y %2$d más</string>
+
     <!-- Navegación -->
     <string name="nav_home">Inicio</string>
     <string name="nav_products">Productos</string>

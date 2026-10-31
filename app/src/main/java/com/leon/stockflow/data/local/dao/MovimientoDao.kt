@@ -75,4 +75,8 @@ abstract class MovimientoDao {
     @Transaction
     @Query("SELECT * FROM movimiento WHERE id = :id")
     abstract suspend fun obtenerPorId(id: Long): MovimientoConDetalles?
+
+    @Transaction
+    @Query("SELECT * FROM movimiento ORDER BY fecha DESC LIMIT :limite")
+    abstract fun obtenerRecientes(limite: Int): Flow<List<MovimientoConDetalles>>
 }
