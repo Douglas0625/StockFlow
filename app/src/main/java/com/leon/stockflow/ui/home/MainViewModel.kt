@@ -20,11 +20,32 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/**
+ * ViewModel de la pantalla Inicio. EJEMPLO a copiar para los ViewModels de las demás pantallas
+ * (ProductosViewModel, MovimientosViewModel...).
+ *
+ * ¿Qué es un ViewModel? El intermediario entre la base de datos y la pantalla:
+ *   - Pide los datos a la base (a través de los DAOs de data/dao).
+ *   - Los transforma a lo que se muestra (por ejemplo "+50" o "Hoy, 10:30 AM").
+ *   - Sobrevive cuando se rota el celular, así no se vuelven a pedir los datos.
+ *   - NO conoce vistas ni botones: eso es trabajo del Fragment.
+ *
+ * Es un AndroidViewModel porque necesita el "contexto" de la app para abrir la base de datos
+ * y leer textos de strings.xml.
+ */
 class MainViewModel(app: Application) : AndroidViewModel(app) {
 
+    // Punto de acceso a la base de datos. Hay UNA sola instancia en toda la app (singleton).
+    // De aquí salen los DAOs: db.productoDao(), db.movimientoDao(), db.categoriaDao()...
     private val db = AppDatabase.getInstance(app)
+    // Configuración común de abajo: mantiene la escucha viva 5 segundos después de que la
+    // pantalla se va (evita recargar si el usuario solo rota el celular).
     private val compartir = SharingStarted.WhileSubscribed(5_000)
 
+    // ----- Datos que la pantalla observa -----
+    // Patrón: el DAO devuelve un Flow (se actualiza solo cuando cambia la base de datos) y
+    // stateIn lo convierte en un StateFlow, que siempre guarda el último valor.
+    // El último argumento (0, emptyList()) es el valor inicial mientras llegan los datos reales.
     val totalUnidades: StateFlow<Int> =
         db.productoDao().totalUnidades().stateIn(viewModelScope, compartir, 0)
 
@@ -40,6 +61,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             .stateIn(viewModelScope, compartir, emptyList())
 
     // ---------- Conversión a lo que se muestra en pantalla ----------
+    // La base de datos guarda "datos crudos" (fecha en milisegundos, cantidades sueltas).
+    // Esta función los convierte en MovimientoUi: texto listo para pintar en cada fila.
+    // Si otra pantalla necesita lo mismo (Movimientos), conviene moverla a ui/common para
+    // no copiarla.
     private fun MovimientoConDetalles.aUi(): MovimientoUi {
         val ctx = getApplication<Application>()
 
@@ -59,6 +84,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         )
     }
 
+    /** Convierte milisegundos en "Hoy, 10:30 AM", "Ayer, 04:45 PM" o "22/10/2026, 11:00 AM". */
     private fun formatearFecha(millis: Long): String {
         val ctx = getApplication<Application>()
         val hora = SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Date(millis))
@@ -70,6 +96,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     // ---------- TEMPORAL: datos de prueba (borrar cuando ya no se necesite) ----------
+    // Inserta productos y movimientos de ejemplo para ver las pantallas con datos.
+    // Se activa descomentando la línea marcada TEMPORAL en InicioFragment. Correrlo UNA vez:
+    // si se corre dos veces se duplican los productos (para empezar de cero, desinstalar la app).
+    // Es también un buen ejemplo de cómo se crea un producto y se registra un movimiento.
     fun cargarDatosDePrueba() = viewModelScope.launch {
         val productoDao = db.productoDao()
         val movimientoDao = db.movimientoDao()

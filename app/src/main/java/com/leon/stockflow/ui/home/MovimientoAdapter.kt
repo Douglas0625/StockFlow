@@ -10,7 +10,10 @@ import com.leon.stockflow.R
 import com.leon.stockflow.data.model.TipoMovimiento
 import com.leon.stockflow.databinding.ItemMovimientoBinding
 
-/** Lo que necesita pintar cada fila de la lista (ya formateado). */
+/**
+ * Lo que necesita pintar cada fila de la lista, ya formateado como texto.
+ * Se separa de la entidad de la base de datos para que el adapter no haga cálculos.
+ */
 data class MovimientoUi(
     val id: Long,
     val titulo: String,
@@ -19,11 +22,26 @@ data class MovimientoUi(
     val tipo: TipoMovimiento
 )
 
+/**
+ * ADAPTER = el "traductor" entre una lista de datos y las filas que se ven en un RecyclerView.
+ * EJEMPLO a copiar para las listas de Productos y Movimientos.
+ *
+ * Cómo funciona un RecyclerView (la lista de Android):
+ *   - Solo crea las filas que caben en pantalla y las REUTILIZA al hacer scroll. Por eso es rápido.
+ *   - onCreateViewHolder: crea una fila vacía (infla item_movimiento.xml). Se llama pocas veces.
+ *   - onBindViewHolder:   llena una fila con los datos de una posición. Se llama muchas veces.
+ *   - DiffUtil (abajo):   compara la lista vieja con la nueva y solo actualiza lo que cambió.
+ *
+ * Para usarlo: binding.rvMovimientos.adapter = adapter   y   adapter.submitList(nuevaLista)
+ *
+ * alTocar = qué hacer cuando se toca una fila; la pantalla que usa el adapter lo decide.
+ */
 class MovimientoAdapter(
     private val alTocar: (idMovimiento: Long) -> Unit
 ) :
     ListAdapter<MovimientoUi, MovimientoAdapter.ViewHolder>(Diff) {
 
+    // El ViewHolder guarda las vistas de UNA fila para no buscarlas cada vez.
     class ViewHolder(val binding: ItemMovimientoBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,6 +49,7 @@ class MovimientoAdapter(
         return ViewHolder(binding)
     }
 
+    // Llena la fila de la posición "position" con sus datos.
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         val b = holder.binding
@@ -41,6 +60,7 @@ class MovimientoAdapter(
             if (esEntrada) R.color.stockflow_success else R.color.stockflow_error
         )
 
+        // Al tocar toda la fila se avisa a la pantalla con el id del movimiento.
         b.root.setOnClickListener { alTocar(item.id) }
         b.tvTitulo.text = item.titulo
         b.tvFecha.text = item.fecha
@@ -55,6 +75,7 @@ class MovimientoAdapter(
         )
     }
 
+    // Le dice a la lista cuándo dos elementos son "el mismo" (mismo id) y cuándo cambió su contenido.
     private object Diff : DiffUtil.ItemCallback<MovimientoUi>() {
         override fun areItemsTheSame(old: MovimientoUi, new: MovimientoUi) = old.id == new.id
         override fun areContentsTheSame(old: MovimientoUi, new: MovimientoUi) = old == new

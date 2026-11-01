@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  PLACEHOLDER de la pantalla "Detalles de Movimiento": reemplazar TODO este contenido por el diseño de Figma.
+  - Aquí va solo el contenido de la pantalla. La barra inferior NO se incluye: vive en
+    activity_main.xml y se ve en todas las pantallas.
+  - Textos en res/values/strings.xml (@string/...), no escritos aquí.
+  - Colores del tema (?attr/colorSurface, ?attr/colorOnSurface, ?attr/colorOnSurfaceVariant,
+    ?attr/colorPrimary...) para que el modo oscuro funcione.
+  - Lo que ya existe y se puede reutilizar: item_movimiento.xml (fila de lista), el estilo
+    @style/CardStockFlow (tarjeta) y los drawables bg_badge_entrada / bg_badge_salida.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"

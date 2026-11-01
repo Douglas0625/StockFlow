@@ -1,4 +1,0 @@
-SOLO COMENTARIOS: el código y los diseños NO cambian.
-Copia la carpeta "app" de este ZIP sobre la de tu proyecto (acepta reemplazar).
-Si alguien del equipo ya modificó MainViewModel.kt, MovimientoAdapter.kt o AppDatabase.kt,
-hagan commit primero para ver las diferencias y mezclar a mano (solo son comentarios).

@@ -24,6 +24,21 @@ import com.leon.stockflow.data.entity.Producto
     version = 1,
     exportSchema = false
 )
+/**
+ * LA BASE DE DATOS de StockFlow (Room sobre SQLite). Une las 4 tablas con sus DAOs.
+ *
+ * Cómo se usa (SIEMPRE desde un ViewModel, nunca desde un Fragment):
+ *
+ *     private val db = AppDatabase.getInstance(app)
+ *     db.productoDao().buscar("", null)     // lee productos
+ *     db.productoDao().insertar(producto)   // guarda un producto
+ *
+ * Reglas de Room que conviene recordar:
+ *   - Una función "suspend" se llama dentro de viewModelScope.launch { ... } (no bloquea la app).
+ *   - Una función que devuelve Flow se observa: avisa sola cada vez que los datos cambian.
+ *   - Si se cambian las tablas (entidades), hay que subir "version" o desinstalar la app del
+ *     celular, de lo contrario la app se cierra al abrir la base de datos.
+ */
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun categoriaDao(): CategoriaDao
@@ -40,6 +55,7 @@ abstract class AppDatabase : RoomDatabase() {
             "Alimentos", "Bebidas", "Limpieza", "Papelería", "Otros"
         )
 
+        // Crea la base de datos la primera vez y después reutiliza la misma (singleton).
         fun getInstance(context: Context): AppDatabase =
             INSTANCE ?: synchronized(this) {
                 INSTANCE ?: Room.databaseBuilder(
