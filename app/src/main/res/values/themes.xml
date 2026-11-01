@@ -46,7 +46,7 @@
         <item name="colorOnErrorContainer">@color/stockflow_on_error_container</item>
 
         <!-- Fuente por defecto -->
-        <item name="android:fontFamily">sans</item>
+<!--        <item name="android:fontFamily">sans</item>-->
 
     </style>
 

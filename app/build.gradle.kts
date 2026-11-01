@@ -46,6 +46,11 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.material)
 
+    // Navegación entre pantallas (Fragments + barra inferior)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
+
     // Room (base de datos local). El compilador de Room se ejecuta con KSP.
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)

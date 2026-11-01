@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  REGLA IMPORTANTE: el id de cada item debe ser IGUAL al id de su pantalla en
+  res/navigation/nav_graph.xml. Así la barra inferior sabe a dónde ir sola.
+-->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_inicio"
+        android:id="@+id/inicioFragment"
         android:icon="@drawable/ic_home"
         android:title="@string/nav_home" />
     <item
-        android:id="@+id/nav_productos"
+        android:id="@+id/productosFragment"
         android:icon="@drawable/ic_products"
         android:title="@string/nav_products" />
     <item
-        android:id="@+id/nav_movimientos"
+        android:id="@+id/movimientosFragment"
         android:icon="@drawable/ic_movements"
         android:title="@string/nav_movements" />
     <item
-        android:id="@+id/nav_ajustes"
+        android:id="@+id/ajustesFragment"
         android:icon="@drawable/ic_settings"
         android:title="@string/nav_settings" />
 </menu>

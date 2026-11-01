@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  MAPA DE NAVEGACIÓN de StockFlow: aquí se declaran las 8 pantallas.
+  Se puede ver como diagrama en la pestaña "Design" de Android Studio.
+
+  - Las 4 primeras son las pestañas de la barra inferior.
+  - Las otras 4 se abren desde ellas y reciben datos por "argumentos".
+
+  PARA ABRIR UNA PANTALLA no se usa este archivo directamente: se usan las funciones de
+  ui/common/Navegacion.kt (irADetalleProducto(id), irAFormularioProducto(), volver()...).
+
+  REGLAS:
+  - El id de cada pantalla (android:id) de las 4 pestañas debe ser IGUAL al id de su item en
+    res/menu/bottom_nav_menu.xml. Si no coinciden, la barra inferior no abre esa pantalla.
+  - Cada <argument> es un dato que la pantalla recibe. Su nombre (android:name) debe ser igual
+    a la constante correspondiente en Args (ui/common/Navegacion.kt).
+  - defaultValue="-1L" significa "no se mandó id" (en el código: Args.SIN_ID).
+  - android:name del <fragment> es la clase Kotlin que dibuja esa pantalla.
+  - tools:layout solo sirve para ver la vista previa en el editor; no afecta a la app.
+-->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/inicioFragment">
+
+    <!-- ===== Pestañas de la barra inferior ===== -->
+    <fragment
+        android:id="@+id/inicioFragment"
+        android:name="com.leon.stockflow.ui.home.InicioFragment"
+        android:label="@string/nav_home"
+        tools:layout="@layout/fragment_inicio" />
+
+    <fragment
+        android:id="@+id/productosFragment"
+        android:name="com.leon.stockflow.ui.products.ProductosFragment"
+        android:label="@string/nav_products"
+        tools:layout="@layout/fragment_productos" />
+
+    <fragment
+        android:id="@+id/movimientosFragment"
+        android:name="com.leon.stockflow.ui.movements.MovimientosFragment"
+        android:label="@string/nav_movements"
+        tools:layout="@layout/fragment_movimientos" />
+
+    <fragment
+        android:id="@+id/ajustesFragment"
+        android:name="com.leon.stockflow.ui.settings.AjustesFragment"
+        android:label="@string/nav_settings"
+        tools:layout="@layout/fragment_ajustes" />
+
+    <!-- ===== Pantallas secundarias ===== -->
+    <!-- idProducto = -1 significa "producto nuevo" -->
+    <fragment
+        android:id="@+id/productoFormularioFragment"
+        android:name="com.leon.stockflow.ui.products.ProductoFormularioFragment"
+        android:label="@string/title_product_form"
+        tools:layout="@layout/fragment_producto_formulario">
+        <argument
+            android:name="idProducto"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/productoDetalleFragment"
+        android:name="com.leon.stockflow.ui.products.ProductoDetalleFragment"
+        android:label="@string/title_product_detail"
+        tools:layout="@layout/fragment_producto_detalle">
+        <argument
+            android:name="idProducto"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </fragment>
+
+    <!-- idProducto = producto que ya va en la lista (-1 = ninguno) -->
+    <fragment
+        android:id="@+id/registrarMovimientoFragment"
+        android:name="com.leon.stockflow.ui.movements.RegistrarMovimientoFragment"
+        android:label="@string/title_register_movement"
+        tools:layout="@layout/fragment_registrar_movimiento">
+        <argument
+            android:name="idProducto"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/movimientoDetalleFragment"
+        android:name="com.leon.stockflow.ui.movements.MovimientoDetalleFragment"
+        android:label="@string/title_movement_detail"
+        tools:layout="@layout/fragment_movimiento_detalle">
+        <argument
+            android:name="idMovimiento"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </fragment>
+
+</navigation>
