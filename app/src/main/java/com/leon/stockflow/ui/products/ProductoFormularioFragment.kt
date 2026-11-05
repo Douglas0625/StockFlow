@@ -1,62 +1,514 @@
 package com.leon.stockflow.ui.products
 
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.leon.stockflow.R
+import com.leon.stockflow.data.entity.Categoria
+import com.leon.stockflow.data.entity.Producto
 import com.leon.stockflow.databinding.FragmentProductoFormularioBinding
 import com.leon.stockflow.ui.common.Args
 import com.leon.stockflow.ui.common.volver
+import kotlinx.coroutines.launch
 
-/**
- * PANTALLA: Agregar / Editar Producto (pantalla secundaria, se abre desde Productos o desde el
- * Detalle del Producto).
- *
- * Modo: si idProducto == Args.SIN_ID (-1) es un producto NUEVO; si trae un id, es EDITAR ese
- * producto (cargarlo con productoDao().obtenerPorId(id) y rellenar los campos).
- *
- * QUÉ DEBE TENER (según Figma): foto (opcional, pendiente de decidir), nombre, categoría
- * (menú desplegable con las categorías predefinidas, el usuario NO crea categorías),
- * descripción, precio de compra, precio de venta, stock actual, stock mínimo, y los botones
- * "Cancelar" (volver()) y "Guardar Producto".
- *
- * DATOS QUE YA EXISTEN:
- *  - db.categoriaDao().obtenerTodas()            Flow<List<Categoria>>  (opciones del desplegable)
- *  - db.productoDao().obtenerPorId(id)           suspend, devuelve Producto?  (para editar)
- *  - db.productoDao().insertar(producto)         suspend  (producto nuevo)
- *  - db.productoDao().actualizar(producto)       suspend  (guardar cambios; el id debe ser el existente)
- *
- * Al guardar con éxito: volver(). Validar antes que nombre, categoría y precios no estén vacíos.
- * Crear un Producto: Producto(nombre = ..., precioCompra = ..., precioVenta = ...,
- * cantidadStock = ..., stockMinimo = ..., idCategoria = ..., fotoUri = null).
 
- * ANTES DE EMPEZAR: leer InicioFragment.kt y MainViewModel.kt (ejemplo completo y comentado).
- * Si hay botones marcados "TEMPORAL", solo prueban la navegación: reemplazarlos por el diseño.
- * Pasos: (1) reemplazar el layout fragment_xxx.xml por el diseño de Figma, (2) crear un
- * ViewModel copiando el patrón de MainViewModel, (3) mostrar los datos en el Fragment,
- * (4) borrar los botones temporales y la línea "En construcción".
- */
-class ProductoFormularioFragment : Fragment(R.layout.fragment_producto_formulario) {
+class ProductoFormularioFragment :
+    Fragment(R.layout.fragment_producto_formulario) {
 
-    // Binding: acceso a las vistas del layout (ver el ejemplo comentado en InicioFragment).
     private var _binding: FragmentProductoFormularioBinding? = null
     private val binding get() = _binding!!
 
-    /** Id del producto a editar. Args.SIN_ID (-1) = producto nuevo. */
-    private val idProducto: Long by lazy { arguments?.getLong(Args.ID_PRODUCTO, Args.SIN_ID) ?: Args.SIN_ID }
+    private val productosViewModel: ProductosViewModel by viewModels()
 
-    // Aquí se conecta todo: botones, listas y datos.
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentProductoFormularioBinding.bind(view)
-        binding.toolbar.setNavigationOnClickListener { volver() }
-        binding.tvInfo.text =
-            if (idProducto == Args.SIN_ID) getString(R.string.new_item) else getString(R.string.received_id, idProducto)
+    // Args.SIN_ID indica que se registrará un producto nuevo.
+    private val idProducto: Long by lazy {
+        arguments?.getLong(
+            Args.ID_PRODUCTO,
+            Args.SIN_ID
+        ) ?: Args.SIN_ID
     }
 
-    // Se suelta el binding cuando la vista se destruye.
+    private var categoriasDisponibles: List<Categoria> = emptyList()
+    private var idCategoriaSeleccionada: Long? = null
+
+    // Producto existente cuando estamos editando.
+    private var productoOriginal: Producto? = null
+
+    // Fotografía seleccionada por el usuario.
+    private var fotoUriSeleccionada: Uri? = null
+
+    // =====================================
+    // 1. SELECCIONAR FOTOGRAFÍA
+    // =====================================
+
+    private val seleccionarFoto = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+
+        if (uri != null) {
+
+            fotoUriSeleccionada = uri
+
+            _binding?.let { vista ->
+
+                vista.ivVistaPreviaProducto.setImageURI(uri)
+                vista.ivVistaPreviaProducto.visibility = View.VISIBLE
+
+                vista.ivFotoFormulario.visibility = View.GONE
+                vista.tvSubirFoto.visibility = View.GONE
+            }
+        }
+    }
+
+    // =====================================
+    // 2. INICIALIZAR EL FORMULARIO
+    // =====================================
+
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
+        super.onViewCreated(view, savedInstanceState)
+
+        _binding = FragmentProductoFormularioBinding.bind(view)
+
+        // Flecha para regresar.
+        binding.toolbar.setNavigationOnClickListener {
+            volver()
+        }
+
+        // Botón Cancelar.
+        binding.btnCancelar.setOnClickListener {
+            volver()
+        }
+
+        // Al editar, esperar a que carguen los datos.
+        binding.btnGuardarProducto.isEnabled =
+            idProducto == Args.SIN_ID
+
+        // Permitir fotografías en productos nuevos y existentes.
+        binding.cardFotoProducto.isEnabled = true
+
+        binding.cardFotoProducto.setOnClickListener {
+
+            seleccionarFoto.launch(
+                PickVisualMediaRequest(
+                    ActivityResultContracts.PickVisualMedia.ImageOnly
+                )
+            )
+        }
+
+        // =====================================
+        // 3. SELECCIONAR CATEGORÍA
+        // =====================================
+
+        binding.actCategoria.setOnItemClickListener {
+                _, _, posicion, _ ->
+
+            idCategoriaSeleccionada =
+                categoriasDisponibles.getOrNull(posicion)?.id
+
+            // Limpiar el mensaje cuando se selecciona una categoría.
+            binding.tilCategoriaProducto.error = null
+        }
+
+        // =====================================
+        // 4. LIMPIAR ERRORES AL ESCRIBIR
+        // =====================================
+
+        binding.etNombreProducto.doAfterTextChanged {
+            binding.tilNombreProducto.error = null
+        }
+
+        binding.etPrecioCompra.doAfterTextChanged {
+            binding.tilPrecioCompra.error = null
+        }
+
+        binding.etPrecioVenta.doAfterTextChanged {
+            binding.tilPrecioVenta.error = null
+        }
+
+        binding.etStockActual.doAfterTextChanged {
+            binding.tilStockActual.error = null
+        }
+
+        binding.etStockMinimo.doAfterTextChanged {
+            binding.tilStockMinimo.error = null
+        }
+
+        // Obtener categorías desde Room.
+        observarCategorias()
+
+        // Cargar un producto si estamos editando.
+        if (idProducto != Args.SIN_ID) {
+            cargarProductoExistente()
+        }
+
+        // Guardar producto nuevo o editado.
+        binding.btnGuardarProducto.setOnClickListener {
+            guardarProducto()
+        }
+    }
+
+    // =====================================
+    // 5. OBTENER CATEGORÍAS DESDE ROOM
+    // =====================================
+
+    private fun observarCategorias() {
+
+        viewLifecycleOwner.lifecycleScope.launch {
+
+            viewLifecycleOwner.repeatOnLifecycle(
+                Lifecycle.State.STARTED
+            ) {
+
+                productosViewModel.categorias.collect { categorias ->
+
+                    categoriasDisponibles = categorias
+
+                    val nombres = categorias.map { it.nombre }
+
+                    val adaptador = ArrayAdapter(
+                        requireContext(),
+                        android.R.layout.simple_dropdown_item_1line,
+                        nombres
+                    )
+
+                    binding.actCategoria.setAdapter(adaptador)
+
+                    mostrarCategoriaSeleccionada()
+                }
+            }
+        }
+    }
+
+    // Mostrar la categoría existente al editar.
+    private fun mostrarCategoriaSeleccionada() {
+
+        val categoria = categoriasDisponibles.firstOrNull {
+            it.id == idCategoriaSeleccionada
+        }
+
+        categoria?.let {
+            binding.actCategoria.setText(it.nombre, false)
+        }
+    }
+
+    // =====================================
+    // 6. CARGAR PRODUCTO PARA EDITAR
+    // =====================================
+
+    private fun cargarProductoExistente() {
+
+        productosViewModel.cargarProductoParaEditar(
+            id = idProducto,
+
+            alCargar = { producto ->
+
+                if (_binding != null && isAdded) {
+
+                    if (producto == null) {
+
+                        Toast.makeText(
+                            requireContext(),
+                            "Producto no encontrado",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        volver()
+
+                    } else {
+
+                        productoOriginal = producto
+
+                        // Mostrar fotografía guardada.
+                        producto.fotoUri?.takeIf {
+                            it.isNotBlank()
+                        }?.let { ruta ->
+
+                            binding.ivVistaPreviaProducto.setImageURI(
+                                Uri.parse(ruta)
+                            )
+
+                            binding.ivVistaPreviaProducto.visibility =
+                                View.VISIBLE
+
+                            binding.ivFotoFormulario.visibility =
+                                View.GONE
+
+                            binding.tvSubirFoto.visibility =
+                                View.GONE
+                        }
+
+                        // Cargar la información del producto.
+                        binding.etNombreProducto.setText(
+                            producto.nombre
+                        )
+
+                        binding.etDescripcionProducto.setText(
+                            producto.descripcion
+                        )
+
+                        binding.etPrecioCompra.setText(
+                            producto.precioCompra.toString()
+                        )
+
+                        binding.etPrecioVenta.setText(
+                            producto.precioVenta.toString()
+                        )
+
+                        binding.etStockActual.setText(
+                            producto.cantidadStock.toString()
+                        )
+
+                        binding.etStockMinimo.setText(
+                            producto.stockMinimo.toString()
+                        )
+
+                        // Recuperar la categoría.
+                        idCategoriaSeleccionada = producto.idCategoria
+
+                        mostrarCategoriaSeleccionada()
+
+                        binding.btnGuardarProducto.isEnabled = true
+                    }
+                }
+            },
+
+            alError = { error ->
+
+                Log.e(
+                    "StockFlowProductos",
+                    "Error al cargar producto",
+                    error
+                )
+
+                if (_binding != null && isAdded) {
+
+                    Toast.makeText(
+                        requireContext(),
+                        "No se pudo cargar el producto",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        )
+    }
+
+    // =====================================
+    // 7. VALIDAR PRECIOS
+    // =====================================
+
+    private fun obtenerPrecio(texto: String): Double? {
+
+        return texto.trim()
+            .replace(',', '.')
+            .toDoubleOrNull()
+            ?.takeIf {
+                it.isFinite() && it >= 0.0
+            }
+    }
+
+    // =====================================
+    // 8. VALIDAR Y GUARDAR PRODUCTO
+    // =====================================
+
+    private fun guardarProducto() {
+
+        // Evitar editar antes de cargar los datos.
+        if (
+            idProducto != Args.SIN_ID &&
+            productoOriginal == null
+        ) {
+            return
+        }
+
+        val nombre = binding.etNombreProducto.text
+            ?.toString()?.trim().orEmpty()
+
+        val descripcion = binding.etDescripcionProducto.text
+            ?.toString()?.trim().orEmpty()
+
+        // VALIDACIÓN 1: NOMBRE.
+        if (nombre.isBlank()) {
+
+            binding.tilNombreProducto.error =
+                getString(R.string.producto_nombre_requerido)
+
+            return
+        }
+
+        // VALIDACIÓN 2: CATEGORÍA.
+        val categoriaId = idCategoriaSeleccionada
+
+        if (categoriaId == null) {
+
+            binding.tilCategoriaProducto.error =
+                getString(R.string.producto_categoria_requerida)
+
+            return
+        }
+
+        // VALIDACIÓN 3: PRECIO DE COMPRA.
+        val precioCompra = obtenerPrecio(
+            binding.etPrecioCompra.text?.toString().orEmpty()
+        )
+
+        if (precioCompra == null) {
+
+            binding.tilPrecioCompra.error =
+                getString(R.string.producto_precio_invalido)
+
+            return
+        }
+
+        // VALIDACIÓN 4: PRECIO DE VENTA.
+        val precioVenta = obtenerPrecio(
+            binding.etPrecioVenta.text?.toString().orEmpty()
+        )
+
+        if (precioVenta == null) {
+
+            binding.tilPrecioVenta.error =
+                getString(R.string.producto_precio_invalido)
+
+            return
+        }
+
+        // VALIDACIÓN 5: STOCK ACTUAL.
+        val stockActual = binding.etStockActual.text
+            ?.toString()
+            ?.toIntOrNull()
+            ?.takeIf { it >= 0 }
+
+        if (stockActual == null) {
+
+            binding.tilStockActual.error =
+                getString(R.string.producto_stock_invalido)
+
+            return
+        }
+
+        // VALIDACIÓN 6: STOCK MÍNIMO.
+        val stockMinimo = binding.etStockMinimo.text
+            ?.toString()
+            ?.toIntOrNull()
+            ?.takeIf { it >= 0 }
+
+        if (stockMinimo == null) {
+
+            binding.tilStockMinimo.error =
+                getString(R.string.producto_stock_invalido)
+
+            return
+        }
+
+        // =====================================
+        // 9. CREAR EL OBJETO PRODUCTO
+        // =====================================
+
+        val producto = Producto(
+            id = productoOriginal?.id ?: 0L,
+            nombre = nombre,
+            descripcion = descripcion,
+            precioCompra = precioCompra,
+            precioVenta = precioVenta,
+            cantidadStock = stockActual,
+            stockMinimo = stockMinimo,
+            idCategoria = categoriaId,
+            fotoUri = productoOriginal?.fotoUri
+        )
+
+        // Evitar presionar Guardar varias veces.
+        binding.btnGuardarProducto.isEnabled = false
+
+        // =====================================
+        // 10. RESPUESTA AL GUARDAR
+        // =====================================
+
+        val alGuardar: () -> Unit = {
+
+            if (_binding != null && isAdded) {
+
+                Toast.makeText(
+                    requireContext(),
+                    R.string.producto_guardado_exito,
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                volver()
+            }
+        }
+
+        // =====================================
+        // 11. RESPUESTA SI OCURRE UN ERROR
+        // =====================================
+
+        val alError: (Exception) -> Unit = { error ->
+
+            Log.e(
+                "StockFlowProductos",
+                "Error al guardar producto",
+                error
+            )
+
+            if (_binding != null && isAdded) {
+
+                binding.btnGuardarProducto.isEnabled = true
+
+                Toast.makeText(
+                    requireContext(),
+                    R.string.producto_guardado_error,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+
+        // =====================================
+        // 12. REGISTRAR O ACTUALIZAR EN ROOM
+        // =====================================
+
+        if (productoOriginal == null) {
+
+            // Registrar producto nuevo.
+            productosViewModel.guardarProductoNuevo(
+                producto = producto,
+                fotoSeleccionada = fotoUriSeleccionada,
+                alGuardar = alGuardar,
+                alError = alError
+            )
+
+        } else {
+
+            // Actualizar producto existente.
+            productosViewModel.actualizarProducto(
+                producto = producto,
+                fotoSeleccionada = fotoUriSeleccionada,
+                alGuardar = alGuardar,
+                alError = alError
+            )
+        }
+    }
+
+    // =====================================
+    // 13. LIBERAR VIEWBINDING
+    // =====================================
+
     override fun onDestroyView() {
+
         _binding = null
+
         super.onDestroyView()
     }
 }

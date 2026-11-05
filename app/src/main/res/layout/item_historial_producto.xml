@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingVertical="10dp">
+
+    <!-- Información del movimiento -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <!-- Flecha de entrada o salida -->
+        <TextView
+            android:id="@+id/tvIndicador"
+            android:layout_width="24dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="18sp"
+            tools:text="↓" />
+
+        <!-- Tipo, fecha y observaciones -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTipoMovimiento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:text="Entrada" />
+
+            <TextView
+                android:id="@+id/tvFechaMovimiento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="11sp"
+                tools:text="04/11/2026" />
+
+            <TextView
+                android:id="@+id/tvObservacionesMovimiento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="11sp"
+                android:visibility="gone"
+                tools:text="Reposición de inventario" />
+
+        </LinearLayout>
+
+        <!-- Cantidad de unidades -->
+        <TextView
+            android:id="@+id/tvCantidadMovimiento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="+5" />
+
+    </LinearLayout>
+
+    <!-- Línea separadora -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="?attr/colorOutlineVariant" />
+
+</LinearLayout>

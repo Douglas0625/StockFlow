@@ -1,60 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  PLACEHOLDER de la pantalla "Productos": reemplazar TODO este contenido por el diseño de Figma.
-  - Aquí va solo el contenido de la pantalla. La barra inferior NO se incluye: vive en
-    activity_main.xml y se ve en todas las pantallas.
-  - Textos en res/values/strings.xml (@string/...), no escritos aquí.
-  - Colores del tema (?attr/colorSurface, ?attr/colorOnSurface, ?attr/colorOnSurfaceVariant,
-    ?attr/colorPrimary...) para que el modo oscuro funcione.
-  - Lo que ya existe y se puede reutilizar: item_movimiento.xml (fila de lista), el estilo
-    @style/CardStockFlow (tarjeta) y los drawables bg_badge_entrada / bg_badge_salida.
--->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface"
+    android:background="?attr/colorSurfaceContainer"
     android:orientation="vertical">
 
+    <!-- ENCABEZADO -->
     <TextView
         android:id="@+id/tvTitulo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
         android:paddingHorizontal="16dp"
-        android:paddingVertical="14dp"
-        android:text="@string/nav_products"
+        android:paddingVertical="18dp"
+        android:text="@string/productos_titulo"
         android:textColor="?attr/colorOnSurface"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
+    <!-- ÁREA DE BÚSQUEDA Y FILTROS -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?attr/colorSurfaceContainer"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
 
+        <!-- BUSCADOR -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etBuscarProducto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/productos_buscar"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- FILTROS HORIZONTALES -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fillViewport="false"
+            android:scrollbars="none">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupCategorias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleLine="true"
+                app:singleSelection="true"
+                app:selectionRequired="true"
+                app:chipSpacingHorizontal="6dp">
+
+                <!-- FILTRO TODOS -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipTodos"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/productos_todos"
+                    android:checkable="true"
+                    android:checked="true"
+                    app:checkedIconVisible="false" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </HorizontalScrollView>
+
+        <!-- TÍTULO DE LA LISTA -->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/under_construction"
-            android:textColor="?attr/colorOnSurfaceVariant" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAgregar"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvSeccionProductos"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="Agregar producto (temporal)"
-            tools:ignore="HardcodedText" />
+            android:text="@string/productos_seccion"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="12sp" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDetalle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="Ver detalle ID 1 (temporal)"
-            tools:ignore="HardcodedText" />
     </LinearLayout>
+
+    <!-- CONTENEDOR DE PRODUCTOS -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingHorizontal="12dp">
+
+        <!-- LISTA DE PRODUCTOS -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvProductos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="76dp"
+            tools:listitem="@layout/item_producto" />
+
+        <!-- MENSAJE CUANDO NO HAY RESULTADOS -->
+        <TextView
+            android:id="@+id/tvEstadoVacio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="70dp"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="@string/productos_sin_resultados"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <!-- BOTÓN FLOTANTE AGREGAR PRODUCTO -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAgregarProducto"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="12dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:contentDescription="@string/productos_agregar"
+            android:text="@string/productos_simbolo_agregar"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="26sp"
+            android:padding="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            app:backgroundTint="?attr/colorPrimary"
+            app:cornerRadius="28dp" />
+
+    </FrameLayout>
 
 </LinearLayout>

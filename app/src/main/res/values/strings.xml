@@ -50,4 +50,78 @@
     <string name="under_construction">En construcción</string>
     <string name="received_id">ID recibido: %1$d</string>
     <string name="new_item">Nuevo (sin ID)</string>
+
+
+    <!-- Módulo de Productos -->
+    <string name="productos_titulo">Inventario de Productos</string>
+    <string name="productos_buscar">Buscar producto...</string>
+    <string name="productos_todos">Todos</string>
+    <string name="productos_seccion">PRODUCTOS</string>
+    <string name="productos_stock">STOCK: %1$d UDS</string>
+    <string name="productos_agregar">Agregar producto</string>
+    <string name="productos_sin_resultados">No se encontraron productos</string>
+    <string name="productos_error_carga">No se pudieron cargar los productos</string>
+    <string name="productos_simbolo_agregar">+</string>
+
+
+    <!-- Formulario de Productos -->
+    <string name="producto_subir_foto">SUBIR FOTO</string>
+    <string name="producto_nombre_label">NOMBRE DEL PRODUCTO</string>
+    <string name="producto_nombre_hint">Ej. Tornillo Hexagonal 1/4</string>
+    <string name="producto_categoria_label">CATEGORÍA</string>
+    <string name="producto_categoria_hint">Selecciona una categoría</string>
+    <string name="producto_descripcion_label">DESCRIPCIÓN</string>
+    <string name="producto_descripcion_hint">Detalles adicionales del producto...</string>
+    <string name="producto_precio_compra">P. COMPRA</string>
+    <string name="producto_precio_venta">P. VENTA</string>
+    <string name="producto_precio_hint">$0.00</string>
+    <string name="producto_stock_actual">STOCK ACTUAL</string>
+    <string name="producto_stock_minimo">STOCK MÍNIMO</string>
+    <string name="producto_cantidad_hint">0</string>
+    <string name="producto_guardar">Guardar Producto</string>
+
+
+    <!-- Validaciones del formulario de Productos -->
+    <string name="producto_nombre_requerido">Ingresa el nombre del producto</string>
+    <string name="producto_categoria_requerida">Selecciona una categoría</string>
+    <string name="producto_precio_invalido">Ingresa un precio válido, igual o mayor que cero</string>
+    <string name="producto_stock_invalido">Ingresa una cantidad entera igual o mayor que cero</string>
+    <string name="producto_guardado_exito">Producto guardado correctamente</string>
+    <string name="producto_guardado_error">No se pudo guardar el producto</string>
+
+
+    <!-- Detalle de Productos -->
+    <string name="producto_detalle_resumen">Producto: %1$s\nCategoría: %2$s\nPrecio de venta: $%3$.2f\nStock actual: %4$d unidades</string>
+    <string name="producto_no_encontrado">Producto no encontrado</string>
+
+
+    <!-- Pantalla Detalle del Producto -->
+    <string name="detalle_foto">Foto del producto</string>
+    <string name="detalle_descripcion">DESCRIPCIÓN</string>
+    <string name="detalle_historial">HISTORIAL DE MOVIMIENTOS</string>
+    <string name="detalle_sin_movimientos">Sin movimientos registrados</string>
+    <string name="detalle_editar">Editar Producto</string>
+    <string name="detalle_registrar_movimiento">Registrar Movimiento</string>
+
+
+    <!-- Formatos para Detalle del Producto -->
+    <string name="detalle_sin_descripcion">Sin descripción</string>
+    <string name="detalle_formato_precio">$%1$.2f</string>
+    <string name="detalle_unidades">%1$d UDS</string>
+
+
+    <!-- Historial de movimientos del producto -->
+    <string name="historial_cantidad_entrada">+%1$d</string>
+    <string name="historial_cantidad_salida">−%1$d</string>
+    <string name="historial_flecha_entrada">↓</string>
+    <string name="historial_flecha_salida">↑</string>
+
+
+    <!-- Flecha para abrir el detalle del producto -->
+    <string name="productos_flecha_detalle">›</string>
+
+
+
+
+
 </resources>

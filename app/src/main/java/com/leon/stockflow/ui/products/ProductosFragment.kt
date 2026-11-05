@@ -1,56 +1,170 @@
+
 package com.leon.stockflow.ui.products
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.chip.Chip
 import com.leon.stockflow.R
+import com.leon.stockflow.data.entity.Categoria
 import com.leon.stockflow.databinding.FragmentProductosBinding
 import com.leon.stockflow.ui.common.irADetalleProducto
 import com.leon.stockflow.ui.common.irAFormularioProducto
+import kotlinx.coroutines.launch
 
-/**
- * PANTALLA: Productos (pestaña de la barra inferior). Título en el diseño: "Inventario de Productos".
- *
- * QUÉ DEBE TENER (según Figma):
- *  - Buscador "Buscar producto..." y chips de filtro: "Todos" + una por categoría.
- *  - Lista de productos: nombre, categoría, precio de venta y etiqueta "STOCK: N UDS"
- *    (naranja si cantidadStock <= stockMinimo, verde si no).
- *  - Botón flotante "+"  ->  irAFormularioProducto()
- *  - Tocar un producto   ->  irADetalleProducto(producto.id)
- *
- * DATOS QUE YA EXISTEN (en data/dao, desde el ViewModel con AppDatabase.getInstance(app)):
- *  - db.productoDao().buscar(texto, idCategoria)  Flow<List<ProductoConCategoria>>
- *        texto = "" trae todos; idCategoria = null trae todas las categorías. Cada resultado
- *        trae .producto (el Producto) y .nombreCategoria.
- *  - db.categoriaDao().obtenerTodas()             Flow<List<Categoria>>  (para los chips)
- *
- * Para la lista copiar el patrón de MovimientoAdapter (ui/home).
- * La búsqueda y el filtro vuelven a llamar a buscar(...) cada vez que el usuario los cambia.
-
- * ANTES DE EMPEZAR: leer InicioFragment.kt y MainViewModel.kt (ejemplo completo y comentado).
- * Si hay botones marcados "TEMPORAL", solo prueban la navegación: reemplazarlos por el diseño.
- * Pasos: (1) reemplazar el layout fragment_xxx.xml por el diseño de Figma, (2) crear un
- * ViewModel copiando el patrón de MainViewModel, (3) mostrar los datos en el Fragment,
- * (4) borrar los botones temporales y la línea "En construcción".
- */
 class ProductosFragment : Fragment(R.layout.fragment_productos) {
 
-    // Binding: acceso a las vistas del layout (ver el ejemplo comentado en InicioFragment).
+    // ViewBinding de la pantalla.
     private var _binding: FragmentProductosBinding? = null
     private val binding get() = _binding!!
 
-    // Aquí se conecta todo: botones, listas y datos.
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentProductosBinding.bind(view)
-        // TEMPORAL: botones de prueba. Quien haga esta pantalla los reemplaza por lo que pide el diseño.
-        binding.btnAgregar.setOnClickListener { irAFormularioProducto() }
-        binding.btnDetalle.setOnClickListener { irADetalleProducto(1L) }
+    // ViewModel que consulta los productos y categorías de Room.
+    private val viewModel: ProductosViewModel by viewModels()
+
+    // Adaptador para mostrar los productos.
+    private val productoAdapter = ProductoAdapter { idProducto ->
+
+        // Abrir el detalle del producto seleccionado.
+        irADetalleProducto(idProducto)
     }
 
-    // Se suelta el binding cuando la vista se destruye.
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
+        super.onViewCreated(view, savedInstanceState)
+
+        _binding = FragmentProductosBinding.bind(view)
+
+        // 1. Configurar la lista de productos.
+        binding.rvProductos.layoutManager =
+            LinearLayoutManager(requireContext())
+
+        binding.rvProductos.adapter = productoAdapter
+
+        // Restaurar la búsqueda anterior.
+        binding.etBuscarProducto.setText(
+            viewModel.busquedaActual
+        )
+
+
+        // 2. Abrir el formulario para agregar productos.
+        binding.btnAgregarProducto.setOnClickListener {
+            irAFormularioProducto()
+        }
+
+        // 3. Buscar productos mientras el usuario escribe.
+        binding.etBuscarProducto.doAfterTextChanged { texto ->
+
+            viewModel.buscarProducto(
+                texto?.toString().orEmpty()
+            )
+        }
+
+        // 4. Mostrar productos de todas las categorías.
+        binding.chipTodos.setOnClickListener {
+            viewModel.filtrarPorCategoria(null)
+        }
+
+        // 5. Escuchar los productos y categorías de Room.
+        observarDatos()
+    }
+
+    // Consultar y observar información de Room.
+    private fun observarDatos() {
+
+        viewLifecycleOwner.lifecycleScope.launch {
+
+            viewLifecycleOwner.repeatOnLifecycle(
+                Lifecycle.State.STARTED
+            ) {
+
+                // Observar la lista de productos.
+                launch {
+
+                    viewModel.productos.collect { productos ->
+
+                        // Actualizar las tarjetas.
+                        productoAdapter.submitList(productos)
+
+                        // Mostrar mensaje si no hay resultados.
+                        binding.tvEstadoVacio.visibility =
+                            if (productos.isEmpty()) {
+                                View.VISIBLE
+                            } else {
+                                View.GONE
+                            }
+                    }
+                }
+
+                // Observar las categorías disponibles.
+                launch {
+
+                    viewModel.categorias.collect { categorias ->
+
+                        // Mostrar los filtros dinámicamente.
+                        mostrarCategorias(categorias)
+                    }
+                }
+            }
+        }
+    }
+
+    // Crear los filtros según las categorías registradas.
+
+    private fun mostrarCategorias(categorias: List<Categoria>) {
+
+        val grupo = binding.chipGroupCategorias
+
+        // Eliminar chips anteriores, excepto Todos.
+        if (grupo.childCount > 1) {
+            grupo.removeViews(1, grupo.childCount - 1)
+        }
+
+        // Recuperar la categoría que estaba seleccionada.
+        val categoriaActual = viewModel.categoriaActual
+
+        categorias.forEach { categoria ->
+
+            val chip = Chip(requireContext()).apply {
+
+                id = View.generateViewId()
+                text = categoria.nombre
+                isCheckable = true
+                isCheckedIconVisible = false
+
+                setOnClickListener {
+                    viewModel.filtrarPorCategoria(categoria.id)
+                }
+            }
+
+            grupo.addView(chip)
+
+            // Mantener marcada la categoría seleccionada.
+            if (categoria.id == categoriaActual) {
+                chip.isChecked = true
+            }
+        }
+
+        // Marcar Todos solamente si no hay categoría activa.
+        binding.chipTodos.isChecked =
+            categoriaActual == null
+    }
+
+
+    // Liberar las referencias al destruir la vista.
     override fun onDestroyView() {
+
+        binding.rvProductos.adapter = null
+
         _binding = null
+
         super.onDestroyView()
     }
 }

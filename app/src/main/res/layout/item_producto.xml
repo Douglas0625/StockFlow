@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="?attr/colorSurface"
+    app:strokeColor="?attr/colorOutlineVariant"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+
+        <!-- Imagen del producto -->
+        <ImageView
+            android:id="@+id/ivProducto"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/colorSurfaceContainer"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop" />
+
+        <!-- Nombre y categoría -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvNombreProducto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="Coca Cola" />
+
+            <TextView
+                android:id="@+id/tvCategoriaProducto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="11sp"
+                tools:text="Bebidas" />
+
+        </LinearLayout>
+
+        <!-- Precio y stock -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvPrecioProducto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:text="$2.80" />
+
+            <!-- Etiqueta de stock -->
+            <TextView
+                android:id="@+id/tvStockProducto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="2dp"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="10sp"
+                tools:text="STOCK: 12 UDS" />
+
+        </LinearLayout>
+
+        <!-- Flecha hacia el detalle -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/productos_flecha_detalle"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="22sp"
+            android:importantForAccessibility="no" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
