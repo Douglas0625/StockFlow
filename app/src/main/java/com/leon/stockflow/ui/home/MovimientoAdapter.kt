@@ -1,8 +1,10 @@
 package com.leon.stockflow.ui.home
 
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -19,8 +21,31 @@ data class MovimientoUi(
     val titulo: String,
     val fecha: String,
     val cantidad: String,
-    val tipo: TipoMovimiento
+    val tipo: TipoMovimiento,
+    val observaciones: String = ""
 )
+
+/**
+ * ADAPTER = el "traductor" entre una lista de datos y las filas que se ven en un RecyclerView.
+ * EJEMPLO a copiar para las listas de Productos y Movimientos.
+ *
+ * Cómo funciona un RecyclerView (la lista de Android):
+ *   - Solo crea las filas que caben en pantalla y las REUTILIZA al hacer scroll. Por eso es rápido.
+ *   - onCreateViewHolder: crea una fila vacía (infla item_movimiento.xml). Se llama pocas veces.
+ *   - onBindViewHolder:   llena una fila con los datos de una posición. Se llama muchas veces.
+ *   - DiffUtil (abajo):   compara la lista vieja con la nueva y solo actualiza lo que cambió.
+ *
+ * Para usarlo: binding.rvMovimientos.adapter = adapter   y   adapter.submitList(nuevaLista)
+ *
+ * alTocar = qué hacer cuando se toca una fila; la pantalla que usa el adapter lo decide.
+ */
+
+
+/**
+ * Lo que necesita pintar cada fila de la lista, ya formateado como texto.
+ * Se separa de la entidad de la base de datos para que el adapter no haga cálculos.
+ */
+
 
 /**
  * ADAPTER = el "traductor" entre una lista de datos y las filas que se ven en un RecyclerView.
@@ -64,6 +89,9 @@ class MovimientoAdapter(
         b.root.setOnClickListener { alTocar(item.id) }
         b.tvTitulo.text = item.titulo
         b.tvFecha.text = item.fecha
+        // La observación es opcional: si está vacía, se oculta la línea.
+        b.tvObservacion.isVisible = item.observaciones.isNotBlank()
+        b.tvObservacion.text = ctx.getString(R.string.movement_note, item.observaciones)
         b.tvCantidad.text = item.cantidad
         b.tvCantidad.setTextColor(color)
         b.tvTipo.text = ctx.getString(

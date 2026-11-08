@@ -2,11 +2,28 @@ package com.leon.stockflow.ui.movements
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.leon.stockflow.R
+import com.leon.stockflow.data.model.TipoMovimiento
 import com.leon.stockflow.databinding.FragmentMovimientosBinding
 import com.leon.stockflow.ui.common.irADetalleMovimiento
 import com.leon.stockflow.ui.common.irARegistrarMovimiento
+import com.leon.stockflow.ui.home.MovimientoAdapter
+import kotlinx.coroutines.launch
+
+/**
+ * PANTALLA: Movimientos (pestaña de la barra inferior). Historial de entradas y salidas.
+ *   - Buscador por nombre de producto.
+ *   - Chips Todos / Entradas / Salidas.
+ *   - Botón flotante "+"   ->  irARegistrarMovimiento()
+ *   - Tocar un movimiento  ->  irADetalleMovimiento(id)
+ */
 
 /**
  * PANTALLA: Movimientos (pestaña de la barra inferior). Historial de entradas y salidas.
@@ -36,23 +53,68 @@ import com.leon.stockflow.ui.common.irARegistrarMovimiento
  * ViewModel copiando el patrón de MainViewModel, (3) mostrar los datos en el Fragment,
  * (4) borrar los botones temporales y la línea "En construcción".
  */
+
 class MovimientosFragment : Fragment(R.layout.fragment_movimientos) {
 
-    // Binding: acceso a las vistas del layout (ver el ejemplo comentado en InicioFragment).
     private var _binding: FragmentMovimientosBinding? = null
     private val binding get() = _binding!!
 
-    // Aquí se conecta todo: botones, listas y datos.
+    private val viewModel: MovimientosViewModel by viewModels()
+
+    // Reutiliza el adapter de Inicio. Al tocar una fila se abre el detalle de ese movimiento.
+    private val adapter = MovimientoAdapter { idMovimiento -> irADetalleMovimiento(idMovimiento) }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentMovimientosBinding.bind(view)
-        // TEMPORAL: botones de prueba. Quien haga esta pantalla los reemplaza por lo que pide el diseño.
-        binding.btnRegistrar.setOnClickListener { irARegistrarMovimiento() }
-        binding.btnDetalle.setOnClickListener { irADetalleMovimiento(1L) }
+
+        binding.rvMovimientos.adapter = adapter
+
+        // Restaurar filtros ANTES de poner los listeners (así no se disparan al restaurar).
+        binding.etBuscar.setText(viewModel.busquedaActual)
+        binding.chipGroupTipo.check(
+            when (viewModel.tipoActual) {
+                TipoMovimiento.ENTRADA -> R.id.chipEntradas
+                TipoMovimiento.SALIDA -> R.id.chipSalidas
+                null -> R.id.chipTodos
+            }
+        )
+
+        // Buscar mientras se escribe.
+        binding.etBuscar.doAfterTextChanged { texto ->
+            viewModel.buscar(texto?.toString().orEmpty())
+        }
+
+        // Cambiar el filtro por tipo.
+        binding.chipGroupTipo.setOnCheckedStateChangeListener { _, ids ->
+            val tipo = when (ids.firstOrNull()) {
+                R.id.chipEntradas -> TipoMovimiento.ENTRADA
+                R.id.chipSalidas -> TipoMovimiento.SALIDA
+                else -> null
+            }
+            viewModel.filtrarPorTipo(tipo)
+        }
+
+        // Botón flotante: registrar un movimiento nuevo.
+        binding.fabRegistrar.setOnClickListener { irARegistrarMovimiento() }
+
+        observarDatos()
     }
 
-    // Se suelta el binding cuando la vista se destruye.
+    // Escucha la lista del ViewModel y actualiza la pantalla cuando cambia (Room avisa solo).
+    private fun observarDatos() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.movimientos.collect { lista ->
+                    adapter.submitList(lista)
+                    binding.tvVacio.isVisible = lista.isEmpty()
+                }
+            }
+        }
+    }
+
     override fun onDestroyView() {
+        binding.rvMovimientos.adapter = null
         _binding = null
         super.onDestroyView()
     }

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="16dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="8dp"
+        android:text="@string/selector_titulo"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etBuscar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/productos_buscar"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:layout_marginTop="8dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvProductos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_producto" />
+
+        <TextView
+            android:id="@+id/tvVacio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="@string/productos_sin_resultados"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:visibility="gone" />
+    </FrameLayout>
+</LinearLayout>
