@@ -120,8 +120,25 @@
     <!-- Flecha para abrir el detalle del producto -->
     <string name="productos_flecha_detalle">›</string>
 
-
-
-
+    <!-- Módulo de Configuración / Ajustes -->
+    <string name="ajustes_titulo">Configuración</string>
+    <string name="ajustes_seccion_apariencia">APARIENCIA</string>
+    <string name="ajustes_modo_interfaz">Modo de interfaz</string>
+    <string name="ajustes_modo_claro">CLARO</string>
+    <string name="ajustes_modo_oscuro">OSCURO</string>
+    <string name="ajustes_seccion_preferencias">PREFERENCIAS</string>
+    <string name="ajustes_idioma">Idioma</string>
+    <string name="ajustes_idioma_es">Español</string>
+    <string name="ajustes_idioma_en">English</string>
+    <string name="ajustes_seleccionar_idioma">Seleccionar idioma</string>
+    <string name="ajustes_seccion_informacion">INFORMACIÓN</string>
+    <string name="ajustes_acerca_de">Acerca de StockFlow</string>
+    <string name="ajustes_descripcion_app">Herramienta profesional de gestión de inventario para optimizar el seguimiento de existencias en tiempo real.</string>
+    <string name="ajustes_version_app">Versión de la aplicación</string>
+    <string name="ajustes_version_formato">V%1$s</string>
+    <string name="ajustes_salir">Salir</string>
+    <string name="ajustes_confirmar_salir_titulo">Salir de StockFlow</string>
+    <string name="ajustes_confirmar_salir_mensaje">¿Estás seguro de que deseas cerrar la aplicación?</string>
+    <string name="ajustes_copyright">STOCKFLOW BUSINESS SOLUTIONS © 2026</string>
 
 </resources>

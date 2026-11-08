@@ -1,0 +1,119 @@
+<resources>
+    <string name="app_name">StockFlow</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_products">Products</string>
+    <string name="nav_movements">Movements</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Common Actions -->
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_search">Search</string>
+    <string name="action_add">Add</string>
+
+    <!-- Home -->
+    <string name="home_total_units">Total Units</string>
+    <string name="home_recent_movements">Recent Movements</string>
+    <string name="home_view_all">View All</string>
+    <string name="coming_soon">Coming Soon</string>
+    <string name="date_today">Today, %1$s</string>
+    <string name="date_yesterday">Yesterday, %1$s</string>
+    <string name="no_products">No products</string>
+    <string name="and_more">%1$s and %2$d more</string>
+
+    <!-- Movements -->
+    <string name="movement_in">Inbound</string>
+    <string name="movement_out">Outbound</string>
+
+    <!-- Stock -->
+    <string name="stock_current">Current Stock</string>
+    <string name="stock_minimum">Minimum Stock</string>
+    <string name="stock_low">Low Stock</string>
+
+    <!-- Empty States -->
+    <string name="empty_list">No items to display</string>
+
+    <!-- Titles -->
+    <string name="title_product_form">Add/Edit Product</string>
+    <string name="title_product_detail">Product Details</string>
+    <string name="title_register_movement">Register Movement</string>
+    <string name="title_movement_detail">Movement Details</string>
+
+    <string name="under_construction">Under Construction</string>
+
+    <!-- Products Module -->
+    <string name="productos_titulo">Product Inventory</string>
+    <string name="productos_buscar">Search product...</string>
+    <string name="productos_todos">All</string>
+    <string name="productos_seccion">PRODUCTS</string>
+    <string name="productos_stock">STOCK: %1$d UNITS</string>
+    <string name="productos_agregar">Add product</string>
+    <string name="productos_sin_resultados">No products found</string>
+    <string name="productos_error_carga">Could not load products</string>
+    <string name="productos_simbolo_agregar">+</string>
+
+    <!-- Form -->
+    <string name="producto_subir_foto">UPLOAD PHOTO</string>
+    <string name="producto_nombre_label">PRODUCT NAME</string>
+    <string name="producto_nombre_hint">E.g. Hexagonal Screw 1/4</string>
+    <string name="producto_categoria_label">CATEGORY</string>
+    <string name="producto_categoria_hint">Select a category</string>
+    <string name="producto_descripcion_label">DESCRIPTION</string>
+    <string name="producto_descripcion_hint">Additional product details...</string>
+    <string name="producto_precio_compra">BUY PRICE</string>
+    <string name="producto_precio_venta">SELL PRICE</string>
+    <string name="producto_precio_hint">$0.00</string>
+    <string name="producto_stock_actual">CURRENT STOCK</string>
+    <string name="producto_stock_minimo">MINIMUM STOCK</string>
+    <string name="producto_cantidad_hint">0</string>
+    <string name="producto_guardar">Save Product</string>
+    <string name="producto_nombre_requerido">Enter product name</string>
+    <string name="producto_categoria_requerida">Select a category</string>
+    <string name="producto_precio_invalido">Enter a valid price greater than or equal to zero</string>
+    <string name="producto_stock_invalido">Enter an integer quantity greater than or equal to zero</string>
+    <string name="producto_guardado_exito">Product saved successfully</string>
+    <string name="producto_guardado_error">Could not save product</string>
+
+    <!-- Detail -->
+    <string name="producto_no_encontrado">Product not found</string>
+    <string name="detalle_foto">Product photo</string>
+    <string name="detalle_descripcion">DESCRIPTION</string>
+    <string name="detalle_historial">MOVEMENT HISTORY</string>
+    <string name="detalle_sin_movimientos">No movements recorded</string>
+    <string name="detalle_editar">Edit Product</string>
+    <string name="detalle_registrar_movimiento">Register Movement</string>
+    <string name="detalle_sin_descripcion">No description</string>
+    <string name="detalle_formato_precio">$%1$.2f</string>
+    <string name="detalle_unidades">%1$d UNITS</string>
+    <string name="historial_cantidad_entrada">+%1$d</string>
+    <string name="historial_cantidad_salida">−%1$d</string>
+    <string name="historial_flecha_entrada">↓</string>
+    <string name="historial_flecha_salida">↑</string>
+    <string name="productos_flecha_detalle">›</string>
+
+    <!-- Settings Module -->
+    <string name="ajustes_titulo">Settings</string>
+    <string name="ajustes_seccion_apariencia">APPEARANCE</string>
+    <string name="ajustes_modo_interfaz">Interface Mode</string>
+    <string name="ajustes_modo_claro">LIGHT</string>
+    <string name="ajustes_modo_oscuro">DARK</string>
+    <string name="ajustes_seccion_preferencias">PREFERENCES</string>
+    <string name="ajustes_idioma">Language</string>
+    <string name="ajustes_idioma_es">Spanish</string>
+    <string name="ajustes_idioma_en">English</string>
+    <string name="ajustes_seleccionar_idioma">Select Language</string>
+    <string name="ajustes_seccion_informacion">INFORMATION</string>
+    <string name="ajustes_acerca_de">About StockFlow</string>
+    <string name="ajustes_descripcion_app">Professional inventory management tool to streamline and optimize real-time stock tracking.</string>
+    <string name="ajustes_version_app">App Version</string>
+    <string name="ajustes_version_formato">V%1$s</string>
+    <string name="ajustes_salir">Exit</string>
+    <string name="ajustes_confirmar_salir_titulo">Exit StockFlow</string>
+    <string name="ajustes_confirmar_salir_mensaje">Are you sure you want to exit the application?</string>
+    <string name="ajustes_copyright">STOCKFLOW BUSINESS SOLUTIONS © 2026</string>
+</resources>

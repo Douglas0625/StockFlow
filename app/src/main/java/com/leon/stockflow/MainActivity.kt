@@ -7,6 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.leon.stockflow.databinding.ActivityMainBinding
 import com.leon.stockflow.ui.common.aplicarInsetsSistema
+import com.leon.stockflow.ui.settings.PreferenciasAjustes
 
 /**
  * ÚNICA Activity de la app: StockFlow usa "una Activity + muchos Fragments".
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        PreferenciasAjustes.aplicarTemaGuardado(this)
         super.onCreate(savedInstanceState)
         // La app se dibuja "de borde a borde", también detrás de la barra de estado (hora y
         // batería, arriba) y de los botones del sistema (abajo). Para no tapar contenido hay

@@ -1,52 +1,170 @@
 package com.leon.stockflow.ui.settings
 
+import android.content.pm.PackageManager
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.leon.stockflow.R
 import com.leon.stockflow.databinding.FragmentAjustesBinding
 
 /**
- * PANTALLA: Ajustes (pestaña de la barra inferior). Se mantiene simple.
+ * PANTALLA: Configuración / Ajustes.
  *
- * QUÉ DEBE TENER (según Figma):
- *  - Apariencia: dos opciones, CLARO y OSCURO.
- *  - Preferencias: Idioma (Español / Inglés).
- *  - Información: "Acerca de StockFlow" con la versión de la app.
- *  - Botón "Salir": cierra la app (requireActivity().finishAffinity()), no hay sesiones.
- *
- * CÓMO HACERLO (sin librerías nuevas):
- *  - Modo claro/oscuro: AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO / MODE_NIGHT_YES).
- *    Guardar la elección en SharedPreferences y volver a aplicarla al iniciar la app
- *    (en MainActivity.onCreate, antes de super.onCreate), de lo contrario se pierde al cerrar.
- *  - Idioma: AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en")).
- *    Requiere crear res/values-en/strings.xml con las traducciones. Dejarlo para el final.
- *  - Versión: leerla del sistema (packageManager.getPackageInfo(...).versionName); no escribir
- *    el número a mano.
- *
- * Esta pantalla no usa la base de datos ni ViewModel de datos.
-
- * ANTES DE EMPEZAR: leer InicioFragment.kt y MainViewModel.kt (ejemplo completo y comentado).
- * Si hay botones marcados "TEMPORAL", solo prueban la navegación: reemplazarlos por el diseño.
- * Pasos: (1) reemplazar el layout fragment_xxx.xml por el diseño de Figma, (2) crear un
- * ViewModel copiando el patrón de MainViewModel, (3) mostrar los datos en el Fragment,
- * (4) borrar los botones temporales y la línea "En construcción".
+ * Funcionalidades según el diseño de Figma:
+ *  - Apariencia: Selector dual (Modo Claro / Modo Oscuro) con persistencia en SharedPreferences.
+ *  - Preferencias: Selector de Idioma (Español / Inglés) mediante AppCompatDelegate.
+ *  - Información: Ficha acerca de StockFlow y lectura dinámica de la versión de la app.
+ *  - Salir: Cierre seguro de la aplicación con confirmación.
  */
 class AjustesFragment : Fragment(R.layout.fragment_ajustes) {
 
-    // Binding: acceso a las vistas del layout (ver el ejemplo comentado en InicioFragment).
     private var _binding: FragmentAjustesBinding? = null
     private val binding get() = _binding!!
 
-    // Aquí se conecta todo: botones, listas y datos.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAjustesBinding.bind(view)
+
+        configurarModoInterfaz()
+        configurarIdioma()
+        configurarVersionApp()
+        configurarBotonSalir()
     }
 
-    // Se suelta el binding cuando la vista se destruye.
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+
+    /**
+     * Configura los botones de interfaz Claro / Oscuro y sincroniza el estado guardado.
+     */
+    private fun configurarModoInterfaz() {
+        val esOscuro = PreferenciasAjustes.esModoOscuro(requireContext())
+        actualizarEstadoModoVisual(esOscuro)
+
+        binding.btnModoClaro.setOnClickListener {
+            if (PreferenciasAjustes.esModoOscuro(requireContext())) {
+                PreferenciasAjustes.guardarModoOscuro(requireContext(), false)
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+
+        binding.btnModoOscuro.setOnClickListener {
+            if (!PreferenciasAjustes.esModoOscuro(requireContext())) {
+                PreferenciasAjustes.guardarModoOscuro(requireContext(), true)
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+        }
+    }
+
+    /**
+     * Actualiza el diseño de los botones para reflejar visualmente cuál está activo.
+     */
+    private fun actualizarEstadoModoVisual(esOscuro: Boolean) {
+        val colorPrimary = com.google.android.material.color.MaterialColors.getColor(
+            requireContext(),
+            androidx.appcompat.R.attr.colorPrimary,
+            android.graphics.Color.BLACK
+        )
+        val colorOutline = com.google.android.material.color.MaterialColors.getColor(
+            requireContext(),
+            com.google.android.material.R.attr.colorOutline,
+            android.graphics.Color.GRAY
+        )
+
+        if (esOscuro) {
+            binding.btnModoClaro.setBackgroundResource(R.drawable.bg_toggle_inactive)
+            binding.ivIconoClaro.imageTintList = ColorStateList.valueOf(colorOutline)
+            binding.tvTextoClaro.setTextColor(colorOutline)
+
+            binding.btnModoOscuro.setBackgroundResource(R.drawable.bg_toggle_active)
+            binding.ivIconoOscuro.imageTintList = ColorStateList.valueOf(colorPrimary)
+            binding.tvTextoOscuro.setTextColor(colorPrimary)
+        } else {
+            binding.btnModoClaro.setBackgroundResource(R.drawable.bg_toggle_active)
+            binding.ivIconoClaro.imageTintList = ColorStateList.valueOf(colorPrimary)
+            binding.tvTextoClaro.setTextColor(colorPrimary)
+
+            binding.btnModoOscuro.setBackgroundResource(R.drawable.bg_toggle_inactive)
+            binding.ivIconoOscuro.imageTintList = ColorStateList.valueOf(colorOutline)
+            binding.tvTextoOscuro.setTextColor(colorOutline)
+        }
+    }
+
+    /**
+     * Configura el selector de idioma (Español / English).
+     */
+    private fun configurarIdioma() {
+        val localesActuales = AppCompatDelegate.getApplicationLocales()
+        val esIngles = localesActuales.toLanguageTags().startsWith("en")
+
+        binding.tvIdiomaSeleccionado.text = if (esIngles) {
+            getString(R.string.ajustes_idioma_en)
+        } else {
+            getString(R.string.ajustes_idioma_es)
+        }
+
+        binding.cardIdioma.setOnClickListener {
+            val opciones = arrayOf(
+                getString(R.string.ajustes_idioma_es),
+                getString(R.string.ajustes_idioma_en)
+            )
+            val seleccionInicial = if (esIngles) 1 else 0
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.ajustes_seleccionar_idioma)
+                .setSingleChoiceItems(opciones, seleccionInicial) { dialog, indice ->
+                    dialog.dismiss()
+                    val tagIdioma = if (indice == 1) "en" else "es"
+                    AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(tagIdioma))
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
+        }
+    }
+
+    /**
+     * Obtiene dinámicamente la versión declarada en Gradle y la formatea en el badge.
+     */
+    private fun configurarVersionApp() {
+        val nombreVersion = try {
+            val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                requireContext().packageManager.getPackageInfo(
+                    requireContext().packageName,
+                    PackageManager.PackageInfoFlags.of(0)
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                requireContext().packageManager.getPackageInfo(requireContext().packageName, 0)
+            }
+            packageInfo.versionName ?: "1.0"
+        } catch (_: Exception) {
+            "1.0"
+        }
+
+        binding.tvVersion.text = getString(R.string.ajustes_version_formato, nombreVersion.uppercase())
+    }
+
+    /**
+     * Configura el botón para salir de la aplicación con diálogo de confirmación.
+     */
+    private fun configurarBotonSalir() {
+        binding.btnSalir.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.ajustes_confirmar_salir_titulo)
+                .setMessage(R.string.ajustes_confirmar_salir_mensaje)
+                .setPositiveButton(R.string.ajustes_salir) { _, _ ->
+                    requireActivity().finishAffinity()
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
+        }
     }
 }
