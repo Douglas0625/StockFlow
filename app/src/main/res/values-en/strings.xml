@@ -96,6 +96,53 @@
     <string name="historial_flecha_salida">↑</string>
     <string name="productos_flecha_detalle">›</string>
 
+    <!-- Movements Module -->
+    <string name="movimientos_buscar">Search product...</string>
+    <string name="movimientos_filtrar_por">FILTER BY</string>
+    <string name="movimientos_todos">All</string>
+    <string name="movimientos_entradas">Inbound</string>
+    <string name="movimientos_salidas">Outbound</string>
+    <string name="movimientos_recientes">Recent</string>
+    <string name="movimientos_sin_resultados">No movements found</string>
+    <string name="movimientos_registrar">Register movement</string>
+    <string name="movement_note">• %1$s</string>
+
+    <!-- Register Movement -->
+    <string name="registrar_operacion">SELECT OPERATION</string>
+    <string name="registrar_fecha">MOVEMENT DATE</string>
+    <string name="registrar_fecha_titulo">Movement date</string>
+    <string name="registrar_observaciones">NOTES (OPTIONAL)</string>
+    <string name="registrar_observaciones_hint">Write the reason for the movement...</string>
+    <string name="registrar_productos">PRODUCTS AFFECTED</string>
+    <string name="registrar_items">%1$d items</string>
+    <string name="registrar_anadir_producto">+ Add Product</string>
+    <string name="registrar_info_entrada">Registering an INBOUND movement will update the available stock immediately.</string>
+    <string name="registrar_info_salida">Registering an OUTBOUND movement will deduct from the available stock immediately.</string>
+    <string name="registrar_boton_entrada">Register Inbound</string>
+    <string name="registrar_boton_salida">Register Outbound</string>
+    <string name="registrar_stock_disponible">Stock: %1$d units</string>
+    <string name="registrar_simbolo_menos">−</string>
+    <string name="registrar_simbolo_mas">+</string>
+    <string name="registrar_disminuir">Decrease quantity</string>
+    <string name="registrar_aumentar">Increase quantity</string>
+    <string name="registrar_quitar">Remove product</string>
+    <string name="registrar_exito">Movement registered</string>
+    <string name="registrar_error_sin_productos">Add at least one product</string>
+    <string name="registrar_error_repetido">That product is already in the list</string>
+    <string name="registrar_error_stock">Insufficient stock for %1$s</string>
+    <string name="registrar_error_generico">Could not register the movement</string>
+    <string name="selector_titulo">Select product</string>
+
+    <!-- Movement Details -->
+    <string name="detalle_mov_tipo">TYPE</string>
+    <string name="detalle_mov_productos">MOVEMENT PRODUCTS</string>
+    <string name="detalle_mov_guardar">Save Changes</string>
+    <string name="detalle_mov_exito">Changes saved</string>
+    <string name="detalle_mov_no_encontrado">Movement not found</string>
+    <string name="detalle_mov_error_carga">Could not load the movement</string>
+    <string name="detalle_mov_error_stock">Cannot save: the stock of %1$s would be negative</string>
+    <string name="detalle_mov_error_generico">Could not save the changes</string>
+
     <!-- Settings Module -->
     <string name="ajustes_titulo">Settings</string>
     <string name="ajustes_seccion_apariencia">APPEARANCE</string>
@@ -116,4 +163,19 @@
     <string name="ajustes_confirmar_salir_titulo">Exit StockFlow</string>
     <string name="ajustes_confirmar_salir_mensaje">Are you sure you want to exit the application?</string>
     <string name="ajustes_copyright">STOCKFLOW BUSINESS SOLUTIONS © 2026</string>
+
+    <!-- Textos localizados para categorías y errores internos del módulo de productos -->
+    <string name="category_food">Food</string>
+    <string name="category_drinks">Drinks</string>
+    <string name="category_cleaning">Cleaning</string>
+    <string name="category_stationery">Stationery</string>
+    <string name="category_other">Other</string>
+    <string name="producto_error_carpeta_fotos">Could not create the photo folder</string>
+    <string name="producto_error_abrir_foto">Could not open the photo</string>
+    <string name="producto_error_cargar">Could not load the product</string>
+    <string name="producto_error_cargar_titulo">Error loading product</string>
+    <string name="producto_error_guardar_titulo">Error saving product</string>
+    <string name="producto_detalle_resumen">Product: %1$s\nCategory: %2$s\nSale price: $%3$.2f\nCurrent stock: %4$d units</string>
+    <string name="received_id">Received ID: %1$d</string>
+    <string name="new_item">New (no ID)</string>
 </resources>

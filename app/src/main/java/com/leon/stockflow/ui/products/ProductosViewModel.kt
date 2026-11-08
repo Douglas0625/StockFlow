@@ -1,5 +1,7 @@
 package com.leon.stockflow.ui.products
 
+import com.leon.stockflow.R
+
 import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
@@ -188,7 +190,7 @@ class ProductosViewModel(
         // Crear carpeta si no existe.
         if (!carpeta.exists() && !carpeta.mkdirs()) {
             throw IOException(
-                "No se pudo crear la carpeta de fotografías"
+                app.getString(R.string.producto_error_carpeta_fotos)
             )
         }
 
@@ -214,7 +216,7 @@ class ProductosViewModel(
             val entrada = app.contentResolver
                 .openInputStream(uriOrigen)
                 ?: throw IOException(
-                    "No se pudo abrir la fotografía"
+                    app.getString(R.string.producto_error_abrir_foto)
                 )
 
             // Copiar al almacenamiento interno.

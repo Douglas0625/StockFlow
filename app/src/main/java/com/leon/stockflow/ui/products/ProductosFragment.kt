@@ -14,6 +14,7 @@ import com.google.android.material.chip.Chip
 import com.leon.stockflow.R
 import com.leon.stockflow.data.entity.Categoria
 import com.leon.stockflow.databinding.FragmentProductosBinding
+import com.leon.stockflow.ui.common.nombreCategoriaLocalizado
 import com.leon.stockflow.ui.common.irADetalleProducto
 import com.leon.stockflow.ui.common.irAFormularioProducto
 import kotlinx.coroutines.launch
@@ -135,7 +136,7 @@ class ProductosFragment : Fragment(R.layout.fragment_productos) {
             val chip = Chip(requireContext()).apply {
 
                 id = View.generateViewId()
-                text = categoria.nombre
+                text = nombreCategoriaLocalizado(requireContext(), categoria.nombre)
                 isCheckable = true
                 isCheckedIconVisible = false
 

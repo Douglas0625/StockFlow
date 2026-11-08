@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.leon.stockflow.R
 import com.leon.stockflow.databinding.FragmentProductoDetalleBinding
+import com.leon.stockflow.ui.common.nombreCategoriaLocalizado
 import com.leon.stockflow.ui.common.Args
 import com.leon.stockflow.ui.common.irAFormularioProducto
 import com.leon.stockflow.ui.common.irARegistrarMovimiento
@@ -167,7 +168,7 @@ class ProductoDetalleFragment :
 
                         // Nombre y categoría.
                         binding.tvNombreDetalle.text = producto.nombre
-                        binding.tvCategoriaDetalle.text = item.nombreCategoria
+                        binding.tvCategoriaDetalle.text = nombreCategoriaLocalizado(requireContext(), item.nombreCategoria)
 
                         // Descripción.
                         binding.tvDescripcionDetalle.text =

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.leon.stockflow.R
 import com.leon.stockflow.data.model.ProductoConCategoria
+import com.leon.stockflow.ui.common.nombreCategoriaLocalizado
 import com.leon.stockflow.databinding.ItemProductoBinding
 import java.text.NumberFormat
 import java.util.Locale
@@ -58,7 +59,7 @@ class ProductoAdapter(
 
         // Nombre y categoría
         binding.tvNombreProducto.text = producto.nombre
-        binding.tvCategoriaProducto.text = item.nombreCategoria
+        binding.tvCategoriaProducto.text = nombreCategoriaLocalizado(contexto, item.nombreCategoria)
 
         // Precio de venta
         val formatoPrecio = NumberFormat.getCurrencyInstance(Locale.US)

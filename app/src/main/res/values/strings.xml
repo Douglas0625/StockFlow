@@ -120,6 +120,53 @@
     <!-- Flecha para abrir el detalle del producto -->
     <string name="productos_flecha_detalle">›</string>
 
+    <!-- Módulo de Movimientos -->
+    <string name="movimientos_buscar">Buscar producto...</string>
+    <string name="movimientos_filtrar_por">FILTRAR POR</string>
+    <string name="movimientos_todos">Todos</string>
+    <string name="movimientos_entradas">Entradas</string>
+    <string name="movimientos_salidas">Salidas</string>
+    <string name="movimientos_recientes">Recientes</string>
+    <string name="movimientos_sin_resultados">No se encontraron movimientos</string>
+    <string name="movimientos_registrar">Registrar movimiento</string>
+    <string name="movement_note">• %1$s</string>
+
+    <!-- Registrar Movimiento -->
+    <string name="registrar_operacion">SELECCIÓN DE OPERACIÓN</string>
+    <string name="registrar_fecha">FECHA DEL MOVIMIENTO</string>
+    <string name="registrar_fecha_titulo">Fecha del movimiento</string>
+    <string name="registrar_observaciones">OBSERVACIONES (OPCIONAL)</string>
+    <string name="registrar_observaciones_hint">Escribe el motivo del movimiento...</string>
+    <string name="registrar_productos">PRODUCTOS A AFECTAR</string>
+    <string name="registrar_items">%1$d items</string>
+    <string name="registrar_anadir_producto">+  Añadir Producto</string>
+    <string name="registrar_info_entrada">El registro de ENTRADA actualizará el stock disponible inmediatamente.</string>
+    <string name="registrar_info_salida">El registro de SALIDA descontará el stock disponible inmediatamente.</string>
+    <string name="registrar_boton_entrada">Registrar Entrada</string>
+    <string name="registrar_boton_salida">Registrar Salida</string>
+    <string name="registrar_stock_disponible">Stock: %1$d uds</string>
+    <string name="registrar_simbolo_menos">−</string>
+    <string name="registrar_simbolo_mas">+</string>
+    <string name="registrar_disminuir">Disminuir cantidad</string>
+    <string name="registrar_aumentar">Aumentar cantidad</string>
+    <string name="registrar_quitar">Quitar producto</string>
+    <string name="registrar_exito">Movimiento registrado</string>
+    <string name="registrar_error_sin_productos">Añade al menos un producto</string>
+    <string name="registrar_error_repetido">Ese producto ya está en la lista</string>
+    <string name="registrar_error_stock">Stock insuficiente para %1$s</string>
+    <string name="registrar_error_generico">No se pudo registrar el movimiento</string>
+    <string name="selector_titulo">Seleccionar producto</string>
+
+    <!-- Detalle de Movimiento -->
+    <string name="detalle_mov_tipo">TIPO</string>
+    <string name="detalle_mov_productos">PRODUCTOS DEL MOVIMIENTO</string>
+    <string name="detalle_mov_guardar">Guardar Cambios</string>
+    <string name="detalle_mov_exito">Cambios guardados</string>
+    <string name="detalle_mov_no_encontrado">Movimiento no encontrado</string>
+    <string name="detalle_mov_error_carga">No se pudo cargar el movimiento</string>
+    <string name="detalle_mov_error_stock">No se puede guardar: el stock de %1$s quedaría en negativo</string>
+    <string name="detalle_mov_error_generico">No se pudieron guardar los cambios</string>
+
     <!-- Módulo de Configuración / Ajustes -->
     <string name="ajustes_titulo">Configuración</string>
     <string name="ajustes_seccion_apariencia">APARIENCIA</string>
@@ -141,4 +188,16 @@
     <string name="ajustes_confirmar_salir_mensaje">¿Estás seguro de que deseas cerrar la aplicación?</string>
     <string name="ajustes_copyright">STOCKFLOW BUSINESS SOLUTIONS © 2026</string>
 
+
+    <!-- Textos localizados para categorías y errores internos del módulo de productos -->
+    <string name="category_food">Alimentos</string>
+    <string name="category_drinks">Bebidas</string>
+    <string name="category_cleaning">Limpieza</string>
+    <string name="category_stationery">Papelería</string>
+    <string name="category_other">Otros</string>
+    <string name="producto_error_carpeta_fotos">No se pudo crear la carpeta de fotografías</string>
+    <string name="producto_error_abrir_foto">No se pudo abrir la fotografía</string>
+    <string name="producto_error_cargar">No se pudo cargar el producto</string>
+    <string name="producto_error_cargar_titulo">Error al cargar producto</string>
+    <string name="producto_error_guardar_titulo">Error al guardar producto</string>
 </resources>

@@ -18,6 +18,7 @@ import com.leon.stockflow.R
 import com.leon.stockflow.data.entity.Categoria
 import com.leon.stockflow.data.entity.Producto
 import com.leon.stockflow.databinding.FragmentProductoFormularioBinding
+import com.leon.stockflow.ui.common.nombreCategoriaLocalizado
 import com.leon.stockflow.ui.common.Args
 import com.leon.stockflow.ui.common.volver
 import kotlinx.coroutines.launch
@@ -113,11 +114,13 @@ class ProductoFormularioFragment :
         // 3. SELECCIONAR CATEGORÍA
         // =====================================
 
-        binding.actCategoria.setOnItemClickListener {
-                _, _, posicion, _ ->
+        binding.actCategoria.setOnItemClickListener { parent, _, posicion, _ ->
 
-            idCategoriaSeleccionada =
-                categoriasDisponibles.getOrNull(posicion)?.id
+            // Resolver por el texto visible, porque el autocompletado puede filtrar la lista.
+            val nombreVisible = parent.getItemAtPosition(posicion)?.toString().orEmpty()
+            idCategoriaSeleccionada = categoriasDisponibles.firstOrNull { categoria ->
+                nombreCategoriaLocalizado(requireContext(), categoria.nombre) == nombreVisible
+            }?.id
 
             // Limpiar el mensaje cuando se selecciona una categoría.
             binding.tilCategoriaProducto.error = null
@@ -177,7 +180,7 @@ class ProductoFormularioFragment :
 
                     categoriasDisponibles = categorias
 
-                    val nombres = categorias.map { it.nombre }
+                    val nombres = categorias.map { nombreCategoriaLocalizado(requireContext(), it.nombre) }
 
                     val adaptador = ArrayAdapter(
                         requireContext(),
@@ -201,7 +204,7 @@ class ProductoFormularioFragment :
         }
 
         categoria?.let {
-            binding.actCategoria.setText(it.nombre, false)
+            binding.actCategoria.setText(nombreCategoriaLocalizado(requireContext(), it.nombre), false)
         }
     }
 
@@ -222,7 +225,7 @@ class ProductoFormularioFragment :
 
                         Toast.makeText(
                             requireContext(),
-                            "Producto no encontrado",
+                            R.string.producto_no_encontrado,
                             Toast.LENGTH_SHORT
                         ).show()
 
@@ -290,7 +293,7 @@ class ProductoFormularioFragment :
 
                 Log.e(
                     "StockFlowProductos",
-                    "Error al cargar producto",
+                    getString(R.string.producto_error_cargar_titulo),
                     error
                 )
 
@@ -298,7 +301,7 @@ class ProductoFormularioFragment :
 
                     Toast.makeText(
                         requireContext(),
-                        "No se pudo cargar el producto",
+                        R.string.producto_error_cargar,
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -459,7 +462,7 @@ class ProductoFormularioFragment :
 
             Log.e(
                 "StockFlowProductos",
-                "Error al guardar producto",
+                getString(R.string.producto_error_guardar_titulo),
                 error
             )
 
