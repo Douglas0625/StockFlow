@@ -200,4 +200,16 @@
     <string name="producto_error_cargar">No se pudo cargar el producto</string>
     <string name="producto_error_cargar_titulo">Error al cargar producto</string>
     <string name="producto_error_guardar_titulo">Error al guardar producto</string>
+
+    <!-- Acciones CRUD -->
+    <string name="producto_eliminar_titulo">Eliminar producto</string>
+    <string name="producto_eliminar_confirmacion">¿Seguro que deseas eliminar este producto? Esta acción no se puede deshacer.</string>
+    <string name="producto_eliminado">Producto eliminado</string>
+    <string name="producto_error_eliminar">No se pudo eliminar el producto</string>
+    <string name="detalle_mov_eliminar_titulo">Eliminar movimiento</string>
+    <string name="detalle_mov_eliminar_confirmacion">¿Seguro que deseas eliminar este movimiento? Se actualizará el stock para revertir su efecto.</string>
+    <string name="detalle_mov_eliminado">Movimiento eliminado y stock actualizado</string>
+    <string name="detalle_mov_error_eliminar_stock">No se puede eliminar: no hay suficientes unidades de %1$s para revertir esta entrada.</string>
+    <string name="detalle_mov_error_eliminar">No se pudo eliminar el movimiento</string>
+
 </resources>

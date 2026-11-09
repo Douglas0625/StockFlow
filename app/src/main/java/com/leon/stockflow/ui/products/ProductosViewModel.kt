@@ -3,6 +3,7 @@ package com.leon.stockflow.ui.products
 import com.leon.stockflow.R
 
 import android.app.Application
+import android.database.sqlite.SQLiteConstraintException
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -317,6 +318,46 @@ class ProductosViewModel(
         }
     }
 
+
+    // =====================================
+    // 7. ELIMINAR PRODUCTO
+    // =====================================
+
+    /**
+     * Elimina el producto si no tiene movimientos asociados. Room protege la integridad
+     * histórica con una FK RESTRICT; si existe historial, se informa sin borrar nada.
+     * La foto interna solo se elimina después de confirmar que el registro fue eliminado.
+     */
+    fun eliminarProducto(
+        id: Long,
+        alEliminar: () -> Unit,
+        alError: (Exception) -> Unit
+    ) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    val producto = db.productoDao().obtenerPorId(id)
+                        ?: throw IllegalArgumentException("El producto ya no existe")
+                    db.productoDao().eliminar(producto)
+
+                    producto.fotoUri?.let { ruta ->
+                        runCatching {
+                            val uri = Uri.parse(ruta)
+                            if (uri.scheme == "file") uri.path?.let { File(it).delete() }
+                        }
+                    }
+                }
+                alEliminar()
+            } catch (e: SQLiteConstraintException) {
+                alError(IllegalStateException(
+                    "No se puede eliminar este producto porque tiene movimientos registrados. " +
+                        "Conservamos su historial para no perder información."
+                ))
+            } catch (e: Exception) {
+                alError(e)
+            }
+        }
+    }
 
     // =====================================
     // 7. OBSERVAR DETALLE DEL PRODUCTO

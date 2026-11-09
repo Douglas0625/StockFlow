@@ -30,17 +30,13 @@
             android:padding="12dp">
 
             <!-- Fotografía del producto -->
-            <com.google.android.material.card.MaterialCardView
+            <FrameLayout
                 android:id="@+id/cardFotoProducto"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                app:cardBackgroundColor="?attr/colorSurface"
-                app:cardCornerRadius="5dp"
-                app:cardElevation="0dp"
-                app:strokeColor="?attr/colorPrimary"
-                app:strokeWidth="1dp">
+                android:background="@drawable/bg_dashed_add">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -77,7 +73,7 @@
 
                 </LinearLayout>
 
-            </com.google.android.material.card.MaterialCardView>
+            </FrameLayout>
 
             <!-- Nombre del producto -->
             <TextView

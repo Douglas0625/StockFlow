@@ -178,4 +178,16 @@
     <string name="producto_detalle_resumen">Product: %1$s\nCategory: %2$s\nSale price: $%3$.2f\nCurrent stock: %4$d units</string>
     <string name="received_id">Received ID: %1$d</string>
     <string name="new_item">New (no ID)</string>
+
+    <!-- CRUD actions -->
+    <string name="producto_eliminar_titulo">Delete product</string>
+    <string name="producto_eliminar_confirmacion">Are you sure you want to delete this product? This action cannot be undone.</string>
+    <string name="producto_eliminado">Product deleted</string>
+    <string name="producto_error_eliminar">Could not delete the product</string>
+    <string name="detalle_mov_eliminar_titulo">Delete movement</string>
+    <string name="detalle_mov_eliminar_confirmacion">Are you sure you want to delete this movement? Stock will be updated to reverse its effect.</string>
+    <string name="detalle_mov_eliminado">Movement deleted and stock updated</string>
+    <string name="detalle_mov_error_eliminar_stock">Cannot delete: there are not enough units of %1$s to reverse this inbound movement.</string>
+    <string name="detalle_mov_error_eliminar">Could not delete the movement</string>
+
 </resources>

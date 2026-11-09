@@ -31,7 +31,8 @@ fun MovimientoConDetalles.aUi(ctx: Context): MovimientoUi {
         fecha = formatearFecha(ctx, movimiento.fecha),
         cantidad = "$signo$total",
         tipo = movimiento.tipo,
-        observaciones = movimiento.observaciones.trim()
+        observaciones = movimiento.observaciones.trim(),
+        fotoUri = detalles.firstOrNull { !it.producto.fotoUri.isNullOrBlank() }?.producto?.fotoUri
     )
 }
 

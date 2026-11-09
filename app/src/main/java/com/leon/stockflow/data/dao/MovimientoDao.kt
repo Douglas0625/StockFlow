@@ -118,6 +118,36 @@ abstract class MovimientoDao {
         actualizarDatos(idMovimiento, fecha, observaciones)
     }
 
+    // ---------- Eliminar un movimiento ----------
+    /**
+     * Elimina un movimiento y revierte su efecto sobre el inventario dentro de una transacción.
+     * - Eliminar una ENTRADA resta del stock las unidades que había agregado.
+     * - Eliminar una SALIDA devuelve al stock las unidades que había descontado.
+     *
+     * Si ya no hay suficientes unidades para revertir una ENTRADA (por ejemplo, porque se
+     * consumieron en movimientos posteriores), la operación falla y Room revierte todo.
+     */
+    @Transaction
+    open suspend fun eliminarMovimiento(idMovimiento: Long) {
+        val actual = obtenerPorId(idMovimiento)
+            ?: throw IllegalArgumentException("El movimiento $idMovimiento no existe")
+
+        for (linea in actual.detalles) {
+            when (actual.movimiento.tipo) {
+                TipoMovimiento.ENTRADA -> {
+                    val filas = reducirStock(linea.producto.id, linea.detalle.cantidad)
+                    if (filas == 0) throw StockInsuficienteException(linea.producto.id)
+                }
+                TipoMovimiento.SALIDA -> aumentarStock(linea.producto.id, linea.detalle.cantidad)
+            }
+        }
+
+        borrarMovimientoPorId(idMovimiento)
+    }
+
+    @Query("DELETE FROM movimiento WHERE id = :idMovimiento")
+    protected abstract suspend fun borrarMovimientoPorId(idMovimiento: Long)
+
     // ---------- Consultas ----------
     @Transaction
     @Query("SELECT * FROM movimiento ORDER BY fecha DESC")

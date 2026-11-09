@@ -11,6 +11,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -49,6 +51,9 @@ class ProductoFormularioFragment :
     // Fotografía seleccionada por el usuario.
     private var fotoUriSeleccionada: Uri? = null
 
+    // Si se abandona el formulario desde la barra inferior, se descarta su back stack guardado.
+    private var destinoListener: NavController.OnDestinationChangedListener? = null
+
     // =====================================
     // 1. SELECCIONAR FOTOGRAFÍA
     // =====================================
@@ -83,6 +88,17 @@ class ProductoFormularioFragment :
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentProductoFormularioBinding.bind(view)
+
+        // NavigationUI conserva el estado de cada pestaña. Si se cambia de pestaña mientras
+        // este formulario está abierto, limpiamos el estado guardado de Productos para que al
+        // regresar se muestre el inventario y no reaparezca el borrador pendiente.
+        val navController = findNavController()
+        destinoListener = NavController.OnDestinationChangedListener { controller, destination, _ ->
+            if (destination.id != R.id.productoFormularioFragment) {
+                controller.clearBackStack(R.id.productosFragment)
+            }
+        }
+        navController.addOnDestinationChangedListener(destinoListener!!)
 
         // Flecha para regresar.
         binding.toolbar.setNavigationOnClickListener {
@@ -509,9 +525,11 @@ class ProductoFormularioFragment :
     // =====================================
 
     override fun onDestroyView() {
-
+        destinoListener?.let { listener ->
+            runCatching { findNavController().removeOnDestinationChangedListener(listener) }
+        }
+        destinoListener = null
         _binding = null
-
         super.onDestroyView()
     }
 }

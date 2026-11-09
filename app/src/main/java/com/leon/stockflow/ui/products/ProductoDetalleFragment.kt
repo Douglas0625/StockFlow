@@ -4,6 +4,8 @@ package com.leon.stockflow.ui.products
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -94,6 +96,15 @@ class ProductoDetalleFragment :
             volver()
         }
 
+        // Eliminar se mantiene en el menú de la barra para no alterar los botones de Figma.
+        binding.toolbar.inflateMenu(R.menu.menu_detalle_acciones)
+        binding.toolbar.setOnMenuItemClickListener { item ->
+            if (item.itemId == R.id.action_delete) {
+                confirmarEliminarProducto()
+                true
+            } else false
+        }
+
         // Editar el producto seleccionado.
         binding.btnEditar.setOnClickListener {
             irAFormularioProducto(idProducto)
@@ -111,6 +122,8 @@ class ProductoDetalleFragment :
             ) {
                 viewModel.observarProducto(idProducto).collect { item ->
 
+
+                    binding.toolbar.menu.findItem(R.id.action_delete)?.isEnabled = item != null
 
                     if (item == null) {
 
@@ -234,6 +247,38 @@ class ProductoDetalleFragment :
                 }
             }
         }
+    }
+
+    private fun confirmarEliminarProducto() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.producto_eliminar_titulo)
+            .setMessage(R.string.producto_eliminar_confirmacion)
+            .setNegativeButton(R.string.action_cancel, null)
+            .setPositiveButton(R.string.action_delete) { _, _ ->
+                binding.toolbar.menu.findItem(R.id.action_delete)?.isEnabled = false
+                viewModel.eliminarProducto(
+                    id = idProducto,
+                    alEliminar = {
+                        if (!isAdded) return@eliminarProducto
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.producto_eliminado,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        volver()
+                    },
+                    alError = { error ->
+                        if (!isAdded) return@eliminarProducto
+                        binding.toolbar.menu.findItem(R.id.action_delete)?.isEnabled = true
+                        Toast.makeText(
+                            requireContext(),
+                            error.message ?: getString(R.string.producto_error_eliminar),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                )
+            }
+            .show()
     }
 
     override fun onDestroyView() {

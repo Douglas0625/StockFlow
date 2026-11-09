@@ -21,11 +21,12 @@
             android:background="@drawable/bg_icon_box">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:id="@+id/ivProducto"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:layout_gravity="center"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_products"
-                app:tint="?attr/colorOnSurfaceVariant"
                 tools:ignore="ContentDescription" />
         </FrameLayout>
 

@@ -1,6 +1,8 @@
 package com.leon.stockflow.ui.home
 
 
+import android.net.Uri
+import java.io.File
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -22,7 +24,8 @@ data class MovimientoUi(
     val fecha: String,
     val cantidad: String,
     val tipo: TipoMovimiento,
-    val observaciones: String = ""
+    val observaciones: String = "",
+    val fotoUri: String? = null
 )
 
 /**
@@ -87,6 +90,23 @@ class MovimientoAdapter(
 
         // Al tocar toda la fila se avisa a la pantalla con el id del movimiento.
         b.root.setOnClickListener { alTocar(item.id) }
+        // La fila representa el primer producto del movimiento, igual que el título.
+        // Limpiar siempre la imagen anterior porque RecyclerView reutiliza las vistas.
+        b.ivProducto.setImageResource(R.drawable.ic_products)
+        b.ivProducto.imageTintList = ContextCompat.getColorStateList(ctx, R.color.stockflow_text_secondary)
+        val foto = item.fotoUri?.takeIf { it.isNotBlank() }?.let(Uri::parse)
+        val fotoExiste = foto?.scheme == "file" &&
+            foto.path?.let { File(it).isFile } == true
+        if (fotoExiste && foto != null) {
+            try {
+                b.ivProducto.setImageURI(foto)
+                b.ivProducto.imageTintList = null
+            } catch (_: Exception) {
+                b.ivProducto.setImageResource(R.drawable.ic_products)
+                b.ivProducto.imageTintList = ContextCompat.getColorStateList(ctx, R.color.stockflow_text_secondary)
+            }
+        }
+
         b.tvTitulo.text = item.titulo
         b.tvFecha.text = item.fecha
         // La observación es opcional: si está vacía, se oculta la línea.

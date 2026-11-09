@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -89,6 +90,13 @@ class MovimientoDetalleFragment : Fragment(R.layout.fragment_movimiento_detalle)
         _binding = FragmentMovimientoDetalleBinding.bind(view)
 
         binding.toolbar.setNavigationOnClickListener { volver() }
+        binding.toolbar.inflateMenu(R.menu.menu_detalle_acciones)
+        binding.toolbar.setOnMenuItemClickListener { item ->
+            if (item.itemId == R.id.action_delete) {
+                confirmarEliminarMovimiento()
+                true
+            } else false
+        }
         binding.btnCancelar.setOnClickListener { volver() }
         binding.rvLineas.adapter = adapter
 
@@ -99,6 +107,18 @@ class MovimientoDetalleFragment : Fragment(R.layout.fragment_movimiento_detalle)
         binding.btnGuardar.setOnClickListener { viewModel.guardar() }
 
         observarDatos()
+    }
+
+    private fun confirmarEliminarMovimiento() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.detalle_mov_eliminar_titulo)
+            .setMessage(R.string.detalle_mov_eliminar_confirmacion)
+            .setNegativeButton(R.string.action_cancel, null)
+            .setPositiveButton(R.string.action_delete) { _, _ ->
+                binding.toolbar.menu.findItem(R.id.action_delete)?.isEnabled = false
+                viewModel.eliminar()
+            }
+            .show()
     }
 
     private fun mostrarCalendario() {
@@ -134,8 +154,10 @@ class MovimientoDetalleFragment : Fragment(R.layout.fragment_movimiento_detalle)
                 launch {
                     viewModel.eventos.collect { evento ->
                         when (evento) {
-                            is EventoDetalle.Mensaje ->
+                            is EventoDetalle.Mensaje -> {
+                                binding.toolbar.menu.findItem(R.id.action_delete)?.isEnabled = true
                                 Toast.makeText(requireContext(), evento.texto, Toast.LENGTH_LONG).show()
+                            }
                             is EventoDetalle.Cerrar -> {
                                 Toast.makeText(requireContext(), evento.texto, Toast.LENGTH_SHORT).show()
                                 volver()

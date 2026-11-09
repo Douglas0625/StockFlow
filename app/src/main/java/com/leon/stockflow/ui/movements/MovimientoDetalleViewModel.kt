@@ -157,6 +157,37 @@ class MovimientoDetalleViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    // ---------- Eliminar ----------
+    fun eliminar() {
+        if (_guardando.value || _tipo.value == null) return
+        _guardando.value = true
+        viewModelScope.launch {
+            try {
+                db.movimientoDao().eliminarMovimiento(idMovimiento)
+                cerrar(R.string.detalle_mov_eliminado)
+            } catch (e: StockInsuficienteException) {
+                val nombre = _lineas.value.firstOrNull { it.idProducto == e.idProducto }?.nombre.orEmpty()
+                _eventos.send(
+                    EventoDetalle.Mensaje(
+                        getApplication<Application>().getString(
+                            R.string.detalle_mov_error_eliminar_stock, nombre
+                        )
+                    )
+                )
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                _eventos.send(
+                    EventoDetalle.Mensaje(
+                        getApplication<Application>().getString(R.string.detalle_mov_error_eliminar)
+                    )
+                )
+            } finally {
+                _guardando.value = false
+            }
+        }
+    }
+
     // ---------- Guardar ----------
     fun guardar() {
         if (_guardando.value || _tipo.value == null) return // evita doble toque o guardar sin datos
