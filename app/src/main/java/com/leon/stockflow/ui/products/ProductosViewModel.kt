@@ -8,6 +8,7 @@ import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.leon.stockflow.data.AppDatabase
+import com.leon.stockflow.notifications.StockBajoNotifier
 import com.leon.stockflow.data.entity.Categoria
 import com.leon.stockflow.data.entity.Producto
 import com.leon.stockflow.data.model.HistorialProducto
@@ -151,9 +152,10 @@ class ProductosViewModel(
                         )
 
                         // Guardar en Room.
-                        db.productoDao().insertar(
+                        val nuevoId = db.productoDao().insertar(
                             productoConFoto
                         )
+                        StockBajoNotifier.verificar(getApplication(), listOf(nuevoId))
 
                     } catch (e: Exception) {
 
@@ -303,6 +305,7 @@ class ProductosViewModel(
                         db.productoDao().actualizar(
                             productoActualizado
                         )
+                        StockBajoNotifier.verificar(getApplication(), listOf(productoActualizado.id))
 
                     } catch (e: Exception) {
                         nuevaFoto?.delete()

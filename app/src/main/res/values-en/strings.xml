@@ -190,4 +190,10 @@
     <string name="detalle_mov_error_eliminar_stock">Cannot delete: there are not enough units of %1$s to reverse this inbound movement.</string>
     <string name="detalle_mov_error_eliminar">Could not delete the movement</string>
 
+    <string name="notif_canal_nombre">Low stock</string>
+    <string name="notif_canal_desc">Alerts when a product reaches its minimum stock</string>
+    <string name="notif_stock_bajo_titulo">Low stock</string>
+    <string name="notif_stock_bajo_texto">%1$s: %2$d units left</string>
+
+    <string name="notif_canal_descripcion">Avisos cuando un producto llega a su stock mínimo</string>
 </resources>

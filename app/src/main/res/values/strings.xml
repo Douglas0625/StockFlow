@@ -212,4 +212,10 @@
     <string name="detalle_mov_error_eliminar_stock">No se puede eliminar: no hay suficientes unidades de %1$s para revertir esta entrada.</string>
     <string name="detalle_mov_error_eliminar">No se pudo eliminar el movimiento</string>
 
+    <string name="notif_canal_nombre">Stock bajo</string>
+    <string name="notif_canal_desc">Avisos cuando un producto llega a su stock mínimo</string>
+    <string name="notif_stock_bajo_titulo">Stock bajo</string>
+    <string name="notif_stock_bajo_texto">%1$s: quedan %2$d unidades</string>
+
+    <string name="notif_canal_descripcion">Avisos cuando un producto llega a su stock mínimo</string>
 </resources>

@@ -1,6 +1,11 @@
 package com.leon.stockflow
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
@@ -32,6 +37,10 @@ class MainActivity : AppCompatActivity() {
     // Con ella se accede a las vistas como binding.bottomNav, sin findViewById.
     private lateinit var binding: ActivityMainBinding
 
+    // Permiso de notificaciones (Android 13+). Si se niega, la app sigue funcionando sin avisos.
+    private val pedirPermisoNotificaciones =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         PreferenciasAjustes.aplicarTemaGuardado(this)
         super.onCreate(savedInstanceState)
@@ -53,5 +62,12 @@ class MainActivity : AppCompatActivity() {
         //    cada pestaña recuerde lo que tenía abierto. Funciona porque el id de cada item de
         //    res/menu/bottom_nav_menu.xml es IGUAL al id de su pantalla en nav_graph.xml.
         binding.bottomNav.setupWithNavController(navHost.navController)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            pedirPermisoNotificaciones.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.leon.stockflow.R
 import com.leon.stockflow.data.AppDatabase
+import com.leon.stockflow.notifications.StockBajoNotifier
 import com.leon.stockflow.data.entity.DetalleMovimiento
 import com.leon.stockflow.data.entity.Movimiento
 import com.leon.stockflow.data.model.StockInsuficienteException
@@ -145,6 +146,7 @@ class RegistrarMovimientoViewModel(app: Application) : AndroidViewModel(app) {
                         DetalleMovimiento(idMovimiento = 0, idProducto = it.idProducto, cantidad = it.cantidad)
                     }
                 )
+                StockBajoNotifier.verificar(getApplication(), lista.map { it.idProducto })
                 _eventos.send(EventoRegistro.Guardado)
             } catch (e: StockInsuficienteException) {
                 // Salida con más unidades que el stock: no se guardó nada.

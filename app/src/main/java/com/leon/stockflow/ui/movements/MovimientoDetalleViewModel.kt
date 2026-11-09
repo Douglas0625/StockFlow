@@ -19,6 +19,7 @@ import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.leon.stockflow.R
 import com.leon.stockflow.data.AppDatabase
+import com.leon.stockflow.notifications.StockBajoNotifier
 import com.leon.stockflow.data.model.TipoMovimiento
 import com.leon.stockflow.databinding.FragmentMovimientoDetalleBinding
 import com.leon.stockflow.ui.common.Args
@@ -164,6 +165,7 @@ class MovimientoDetalleViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             try {
                 db.movimientoDao().eliminarMovimiento(idMovimiento)
+                StockBajoNotifier.verificar(getApplication(), _lineas.value.map { it.idProducto })
                 cerrar(R.string.detalle_mov_eliminado)
             } catch (e: StockInsuficienteException) {
                 val nombre = _lineas.value.firstOrNull { it.idProducto == e.idProducto }?.nombre.orEmpty()
@@ -202,6 +204,7 @@ class MovimientoDetalleViewModel(app: Application) : AndroidViewModel(app) {
                     observaciones = _observaciones.value.trim(),
                     cantidades = lista.associate { it.idProducto to it.cantidad }
                 )
+                StockBajoNotifier.verificar(getApplication(), lista.map { it.idProducto })
                 cerrar(R.string.detalle_mov_exito)
             } catch (e: StockInsuficienteException) {
                 // Algún producto quedaría con stock negativo: no se cambió nada.
